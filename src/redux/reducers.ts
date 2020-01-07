@@ -6,21 +6,45 @@ const defaultState = {
   projects: [
     {
       id: 1,
-      title: 'Project - April',
-      description: faker.lorem.paragraphs(2),
-    },
-    {
-      id: 2,
-      title: 'Project - May',
-      description: faker.lorem.paragraphs(2),
-    },
-    {
-      id: 3,
-      title: 'Project - June',
+      name: 'Project - April',
       description: faker.lorem.paragraphs(2),
     },
   ],
-  currentProject: null,
+  rooms: [
+    {
+      projectId: 1,
+      name: 'Living Room',
+      description: faker.lorem.paragraphs(2),
+      items: [
+        {
+          name: 'Desk',
+          volume: 10,
+          count: 1,
+          description: faker.lorem.paragraphs(2),
+        },
+        {
+          name: 'Chair',
+          volume: 3,
+          count: 4,
+          description: faker.lorem.paragraphs(2),
+        },
+      ],
+    },
+    {
+      projectId: 1,
+      name: 'Bedroom',
+      description: faker.lorem.paragraphs(2),
+      items: [
+        {
+          name: 'Bed',
+          volume: 30,
+          count: 1,
+          description: faker.lorem.paragraphs(2),
+        },
+      ],
+    },
+  ],
+  currentProjectId: null,
   config: {},
 };
 

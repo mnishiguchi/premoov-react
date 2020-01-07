@@ -3,14 +3,15 @@
 import React from 'react';
 import { Container, Card } from 'semantic-ui-react';
 import { Link } from '@reach/router';
-import { useStore } from 'react-redux';
 import { Helmet } from 'react-helmet';
+import { useSelector } from 'react-redux';
 
 import { fullPageTitle } from '../lib';
 
 const HomePage: React.FC = () => {
-  const { projects } = useStore().getState();
   const pageTitle = 'My Projects';
+
+  const projects = useSelector(state => state.projects);
 
   return (
     <Container>
@@ -24,7 +25,7 @@ const HomePage: React.FC = () => {
         {projects.map(project => (
           <Card key={project.id} as={Link} to={`/projects/${project.id}`}>
             <Card.Content>
-              <Card.Header>{project.title}</Card.Header>
+              <Card.Header>{project.name}</Card.Header>
               <Card.Description>{project.description}</Card.Description>
             </Card.Content>
           </Card>

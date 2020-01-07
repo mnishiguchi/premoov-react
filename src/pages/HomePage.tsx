@@ -4,12 +4,20 @@ import React from 'react';
 import { Container, Card } from 'semantic-ui-react';
 import { Link } from '@reach/router';
 import { useStore } from 'react-redux';
+import { Helmet } from 'react-helmet';
+
+import { fullPageTitle } from '../lib';
 
 const HomePage: React.FC = () => {
   const { projects } = useStore().getState();
+  const pageTitle = 'My Projects';
 
   return (
     <Container>
+      <Helmet>
+        <title>{fullPageTitle(pageTitle)}</title>
+      </Helmet>
+
       <h1>My Projects</h1>
 
       <Card.Group>

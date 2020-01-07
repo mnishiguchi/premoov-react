@@ -1,10 +1,19 @@
 import React from 'react';
 import { Container } from 'semantic-ui-react';
+import { Helmet } from 'react-helmet';
+
+import { fullPageTitle } from '../lib';
 
 const RoomEditPage: React.FC = () => {
+  const pageTitle = 'RoomEditPage';
+
   return (
     <Container>
-      <h1>RoomEditPage</h1>
+      <Helmet>
+        <title>{fullPageTitle(pageTitle)}</title>
+      </Helmet>
+
+      <h1>{pageTitle}</h1>
     </Container>
   );
 };

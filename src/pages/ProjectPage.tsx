@@ -1,11 +1,20 @@
 // @ts-nocheck
 
 import React from 'react';
-import { Container, Header, Tab, Table, Button, Icon } from 'semantic-ui-react';
+import {
+  Container,
+  Header,
+  Tab,
+  Table,
+  Button,
+  Icon,
+  Modal,
+} from 'semantic-ui-react';
 import { Helmet } from 'react-helmet';
 import { useSelector } from 'react-redux';
 
 import { fullPageTitle } from '../lib';
+import ItemForm from '../components/ItemForm';
 
 type Props = {
   id: string | number;
@@ -49,9 +58,18 @@ const ProjectPage: React.FC<Props> = ({ id }: Props) => {
                       <Icon name="plus" />
                     </Button>
                   </span>{' '}
-                  <Button icon basic size="tiny">
-                    <Icon name="pencil" />
-                  </Button>
+                  <Modal
+                    size="small"
+                    trigger={
+                      <Button icon basic size="tiny">
+                        <Icon name="pencil" />
+                      </Button>
+                    }
+                  >
+                    <Modal.Content>
+                      <ItemForm submitText="Save" initialValues={item} />
+                    </Modal.Content>
+                  </Modal>
                 </Table.Cell>
               </Table.Row>
             ))}
@@ -69,10 +87,35 @@ const ProjectPage: React.FC<Props> = ({ id }: Props) => {
 
       <Header as="h1">{pageTitle}</Header>
 
-      <p>ID: {id}</p>
       <p>name: {project.description}</p>
 
       <Tab panes={panes} />
+
+      <Modal
+        size="small"
+        trigger={
+          <Button icon>
+            <Icon name="plus" /> Add Item
+          </Button>
+        }
+      >
+        <Modal.Content>
+          <ItemForm submitText="Save" />
+        </Modal.Content>
+      </Modal>
+
+            <Modal
+        size="small"
+        trigger={
+          <Button icon>
+            <Icon name="plus" /> Add Room
+          </Button>
+        }
+      >
+        <Modal.Content>
+          <p>Under construction</p>
+        </Modal.Content>
+      </Modal>
     </Container>
   );
 };

@@ -1,7 +1,7 @@
 // @ts-nocheck
 
 import React from 'react';
-import { Container } from 'semantic-ui-react';
+import { Container } from '@material-ui/core';
 import { ToastContainer, toast } from 'react-toastify';
 import { Provider } from 'react-redux';
 import { Helmet } from 'react-helmet';

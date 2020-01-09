@@ -2,82 +2,45 @@
 
 import React from 'react';
 import {
-  Container,
-  Header,
   Tab,
-  Table,
+  Tabs,
   Button,
-  Icon,
-  Modal,
-} from 'semantic-ui-react';
+  ButtonGroup,
+  Container,
+  Typography,
+} from '@material-ui/core';
 import { Helmet } from 'react-helmet';
 import { useSelector } from 'react-redux';
 
 import { fullPageTitle } from '../lib';
-import ItemForm from '../components/ItemForm';
+import RoomItemTable from '../components/RoomItemTable';
+import RoomFormDialog from '../components/RoomFormDialog';
+import ItemFormDialog from '../components/ItemFormDialog';
+import useToggle from '../components/useToggle';
 
-type Props = {
+const ProjectPage: React.FC<{
   id: string | number;
-};
-
-const ProjectPage: React.FC<Props> = ({ id }: Props) => {
+}> = ({ id }) => {
   const { project, rooms } = useSelector(state => ({
     project: state.projects.find(project => Number(project.id) === Number(id)),
     rooms: state.rooms.filter(room => Number(room.projectId) === Number(id)),
   }));
-
   const pageTitle = project.name;
 
-  const panes = rooms.map(room => ({
-    menuItem: room.name,
-    render: () => (
-      <Tab.Pane>
-        <Table singleLine unstackable>
-          <Table.Header>
-            <Table.Row>
-              <Table.HeaderCell>Name</Table.HeaderCell>
-              <Table.HeaderCell>Volume</Table.HeaderCell>
-              <Table.HeaderCell>Count</Table.HeaderCell>
-              <Table.HeaderCell>Total</Table.HeaderCell>
-              <Table.HeaderCell></Table.HeaderCell>
-            </Table.Row>
-          </Table.Header>
-          <Table.Body>
-            {room.items.map(item => (
-              <Table.Row key={item.name}>
-                <Table.Cell>{item.name}</Table.Cell>
-                <Table.Cell>{item.volume}</Table.Cell>
-                <Table.Cell>{item.count}</Table.Cell>
-                <Table.Cell>{item.volume * item.count}</Table.Cell>
-                <Table.Cell textAlign="right">
-                  <span>
-                    <Button icon basic size="tiny" attached="left">
-                      <Icon name="minus" />
-                    </Button>
-                    <Button icon basic size="tiny" attached="right">
-                      <Icon name="plus" />
-                    </Button>
-                  </span>{' '}
-                  <Modal
-                    size="small"
-                    trigger={
-                      <Button icon basic size="tiny">
-                        <Icon name="pencil" />
-                      </Button>
-                    }
-                  >
-                    <Modal.Content>
-                      <ItemForm submitText="Save" initialValues={item} />
-                    </Modal.Content>
-                  </Modal>
-                </Table.Cell>
-              </Table.Row>
-            ))}
-          </Table.Body>
-        </Table>
-      </Tab.Pane>
-    ),
-  }));
+  const [tabValue, setTabValue] = React.useState(0);
+  const {
+    open: openAddRoomModal,
+    close: closeAddRoomModal,
+    isOpen: isOpenAddRoomModal,
+  } = useToggle(false);
+  const {
+    open: openAddItemModal,
+    close: closeAddItemModal,
+    isOpen: isOpenAddItemModal,
+  } = useToggle(false);
+
+  const changeTab = (event: React.ChangeEvent<{}>, newValue: number) =>
+    setTabValue(newValue);
 
   return (
     <Container>
@@ -85,37 +48,49 @@ const ProjectPage: React.FC<Props> = ({ id }: Props) => {
         <title>{fullPageTitle(pageTitle)}</title>
       </Helmet>
 
-      <Header as="h1">{pageTitle}</Header>
+      <Typography variant="h4" gutterBottom>
+        {pageTitle}
+      </Typography>
+      <Typography variant="body1">{project.description}</Typography>
+      <br />
 
-      <p>name: {project.description}</p>
+      <div>
+        <Tabs value={tabValue} onChange={changeTab}>
+          {rooms.map((room, index) => (
+            <Tab label={room.name} key={room.name} />
+          ))}
+        </Tabs>
+        {rooms.map((room, index) => (
+          <div key={index}>
+            {tabValue === index && <RoomItemTable rows={room.items} />}
+          </div>
+        ))}
+      </div>
+      <br />
 
-      <Tab panes={panes} />
+      <ButtonGroup>
+        <Button onClick={openAddItemModal}>Add Item</Button>
+        <ItemFormDialog
+          isOpen={isOpenAddItemModal}
+          onClose={closeAddItemModal}
+          onSubmit={e => {
+            console.log(e);
+            closeAddRoomModal();
+          }}
+          title={`Add Item`}
+        />
 
-      <Modal
-        size="small"
-        trigger={
-          <Button icon>
-            <Icon name="plus" /> Add Item
-          </Button>
-        }
-      >
-        <Modal.Content>
-          <ItemForm submitText="Save" />
-        </Modal.Content>
-      </Modal>
-
-            <Modal
-        size="small"
-        trigger={
-          <Button icon>
-            <Icon name="plus" /> Add Room
-          </Button>
-        }
-      >
-        <Modal.Content>
-          <p>Under construction</p>
-        </Modal.Content>
-      </Modal>
+        <Button onClick={openAddRoomModal}>Add Room</Button>
+        <RoomFormDialog
+          isOpen={isOpenAddRoomModal}
+          onClose={closeAddRoomModal}
+          onSubmit={e => {
+            console.log(e);
+            closeAddRoomModal();
+          }}
+          title={`Add Room`}
+        />
+      </ButtonGroup>
     </Container>
   );
 };

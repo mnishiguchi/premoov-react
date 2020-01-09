@@ -1,7 +1,14 @@
 // @ts-nocheck
 
 import React from 'react';
-import { Container, Card } from 'semantic-ui-react';
+import {
+  Button,
+  Container,
+  Card,
+  CardActions,
+  CardContent,
+  Typography,
+} from '@material-ui/core';
 import { Link } from '@reach/router';
 import { Helmet } from 'react-helmet';
 import { useSelector } from 'react-redux';
@@ -19,18 +26,27 @@ const HomePage: React.FC = () => {
         <title>{fullPageTitle(pageTitle)}</title>
       </Helmet>
 
-      <h1>My Projects</h1>
+      <Typography variant="h4" gutterBottom>
+        My Projects
+      </Typography>
 
-      <Card.Group>
+      <div>
         {projects.map(project => (
-          <Card key={project.id} as={Link} to={`/projects/${project.id}`}>
-            <Card.Content>
-              <Card.Header>{project.name}</Card.Header>
-              <Card.Description>{project.description}</Card.Description>
-            </Card.Content>
+          <Card key={project.id}>
+            <CardContent>
+              <Typography variant="h5" gutterBottom>
+                {project.name}
+              </Typography>
+              <Typography variant="body2">{project.description}</Typography>
+            </CardContent>
+            <CardActions>
+              <Button component={Link} to={`/projects/${project.id}`}>
+                Details
+              </Button>
+            </CardActions>
           </Card>
         ))}
-      </Card.Group>
+      </div>
     </Container>
   );
 };

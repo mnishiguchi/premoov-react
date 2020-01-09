@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container } from 'semantic-ui-react';
+import { Container } from '@material-ui/core';
 import { Helmet } from 'react-helmet';
 
 import { fullPageTitle } from '../lib';

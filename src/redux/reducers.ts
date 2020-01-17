@@ -43,6 +43,38 @@ const defaultState = {
         },
       ],
     },
+    {
+      projectId: 1,
+      name: 'Kitchen',
+      description: faker.lorem.paragraphs(2),
+      items: [
+        {
+          name: 'Small box',
+          volume: 3,
+          count: 10,
+          description: faker.lorem.paragraphs(2),
+        },
+      ],
+    },
+    {
+      projectId: 1,
+      name: 'Bathroom',
+      description: faker.lorem.paragraphs(2),
+      items: [
+        {
+          name: 'Small box',
+          volume: 3,
+          count: 2,
+          description: faker.lorem.paragraphs(2),
+        },
+        {
+          name: 'Medium box',
+          volume: 5,
+          count: 3,
+          description: faker.lorem.paragraphs(2),
+        },
+      ],
+    },
   ],
   currentProjectId: null,
   config: {},

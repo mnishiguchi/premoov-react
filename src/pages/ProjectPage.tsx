@@ -55,7 +55,12 @@ const ProjectPage: React.FC<{
       <br />
 
       <div>
-        <Tabs value={tabValue} onChange={changeTab}>
+        <Tabs
+          value={tabValue}
+          onChange={changeTab}
+          variant="scrollable"
+          scrollButtons="auto"
+        >
           {rooms.map((room, index) => (
             <Tab label={room.name} key={room.name} />
           ))}

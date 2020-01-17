@@ -12,7 +12,7 @@ import {
   DialogTitle,
 } from '@material-ui/core';
 
-const RoomFormDialog: React.FC<{
+const ProjectFormDialog: React.FC<{
   title?: string;
   isOpen: boolean;
   onClose: (e: any) => void;
@@ -95,4 +95,4 @@ const RoomFormDialog: React.FC<{
   );
 };
 
-export default RoomFormDialog;
+export default ProjectFormDialog;

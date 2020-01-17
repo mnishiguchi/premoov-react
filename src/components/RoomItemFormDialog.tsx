@@ -9,16 +9,14 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
-  DialogContentText,
   DialogTitle,
 } from '@material-ui/core';
-import { makeStyles, createStyles } from '@material-ui/core/styles';
 
-const ItemFormDialog: React.FC<{
+const RoomItemFormDialog: React.FC<{
   title?: string;
   isOpen: boolean;
   onClose: (e: any) => void;
-  onSubmit: (e: any) => void;
+  onSubmit: (e: any, others: {}) => void;
   initialValues?: any;
 }> = ({ onSubmit, initialValues = {}, title, isOpen, onClose }) => {
   const {
@@ -54,6 +52,8 @@ const ItemFormDialog: React.FC<{
     <Dialog open={isOpen} onClose={onClose}>
       {title && <DialogTitle>{title}</DialogTitle>}
 
+      {/* This is a workaround to retain the modal width.
+      By default, the model content shrinks when there is no DialogContentText. */}
       <div style={{ width: '600px' }} />
 
       <DialogContent>
@@ -131,4 +131,4 @@ const ItemFormDialog: React.FC<{
   );
 };
 
-export default ItemFormDialog;
+export default RoomItemFormDialog;

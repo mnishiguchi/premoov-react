@@ -6,7 +6,7 @@ import { Router } from '@reach/router';
 import HomePage from './pages/HomePage';
 import AboutPage from './pages/AboutPage';
 import ProjectPage from './pages/ProjectPage';
-import RoomPage from './pages/AboutPage';
+import RoomsPage from './pages/RoomsPage';
 
 const Routes: React.FC = () => {
   return (
@@ -14,7 +14,7 @@ const Routes: React.FC = () => {
       <HomePage path="/" />
       <AboutPage path="about" />
       <ProjectPage path="projects/:id" />
-      <RoomPage path="rooms/:id" />
+      <RoomsPage path="projects/:projectId/rooms" />
     </Router>
   );
 };

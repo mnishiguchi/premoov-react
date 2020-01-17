@@ -9,20 +9,10 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
+  DialogContentText,
   DialogTitle,
 } from '@material-ui/core';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
-
-const getDialogContentClassName = makeStyles(() =>
-  createStyles({
-    root: {
-      // This is a workaround to retain the modal width.
-      // By default, the model content shrinks when there is no DialogContentText.
-      width: '80vw',
-      maxWidth: '600px',
-    },
-  })
-);
 
 const ItemFormDialog: React.FC<{
   title?: string;
@@ -64,7 +54,9 @@ const ItemFormDialog: React.FC<{
     <Dialog open={isOpen} onClose={onClose}>
       {title && <DialogTitle>{title}</DialogTitle>}
 
-      <DialogContent classes={getDialogContentClassName()}>
+      <div style={{ width: '600px' }} />
+
+      <DialogContent>
         <TextField
           name="name"
           label="name"

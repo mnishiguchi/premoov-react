@@ -2,6 +2,7 @@
 
 import React from 'react';
 import {
+  ButtonGroup,
   IconButton,
   Paper,
   Table,
@@ -42,27 +43,29 @@ const RoomItemTable: React.FC = ({ rows }) => {
               <TableCell align="right">{row.count}</TableCell>
               <TableCell align="right">{row.volume * row.count}</TableCell>
               <TableCell align="right">
-                <IconButton>
-                  <RemoveIcon />
-                </IconButton>
+                <ButtonGroup variant="text" color="primary">
+                  <IconButton>
+                    <RemoveIcon />
+                  </IconButton>
 
-                <IconButton>
-                  <AddIcon />
-                </IconButton>
+                  <IconButton>
+                    <AddIcon />
+                  </IconButton>
 
-                <IconButton onClick={() => openModal(row.name)}>
-                  <EditIcon />
-                </IconButton>
-                <ItemFormDialog
-                  initialValues={row}
-                  isOpen={modalId === row.name}
-                  onClose={closeModal}
-                  onSubmit={e => {
-                    console.log(e);
-                    closeModal();
-                  }}
-                  title={`Edit Item`}
-                />
+                  <IconButton onClick={() => openModal(row.name)}>
+                    <EditIcon />
+                  </IconButton>
+                  <ItemFormDialog
+                    initialValues={row}
+                    isOpen={modalId === row.name}
+                    onClose={closeModal}
+                    onSubmit={e => {
+                      console.log(e);
+                      closeModal();
+                    }}
+                    title={`Edit Item`}
+                  />
+                </ButtonGroup>
               </TableCell>
             </TableRow>
           ))}

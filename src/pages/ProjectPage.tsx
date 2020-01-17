@@ -73,7 +73,7 @@ const ProjectPage: React.FC<{
       </div>
       <br />
 
-      <ButtonGroup>
+      <ButtonGroup variant="text" color="primary">
         <Button onClick={openAddItemModal}>Add Item</Button>
         <ItemFormDialog
           isOpen={isOpenAddItemModal}

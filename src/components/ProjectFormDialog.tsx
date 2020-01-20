@@ -11,6 +11,8 @@ import {
   DialogTitle,
 } from '@material-ui/core';
 
+import FormFieldSpacer from './FormFieldSpacer';
+
 const ProjectFormDialog: React.FC<{
   title?: string;
   isOpen: boolean;
@@ -65,7 +67,7 @@ const ProjectFormDialog: React.FC<{
           }}
           required
         />
-        <br />
+        <FormFieldSpacer />
         <TextField
           multiline
           name="description"

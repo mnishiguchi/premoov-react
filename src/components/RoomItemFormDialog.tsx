@@ -11,6 +11,8 @@ import {
   DialogTitle,
 } from '@material-ui/core';
 
+import FormFieldSpacer from './FormFieldSpacer';
+
 const RoomItemFormDialog: React.FC<{
   title?: string;
   isOpen: boolean;
@@ -69,7 +71,7 @@ const RoomItemFormDialog: React.FC<{
           }}
           required
         />
-        <br />
+        <FormFieldSpacer />
         <TextField
           type="number"
           min="0"
@@ -85,7 +87,7 @@ const RoomItemFormDialog: React.FC<{
           }}
           required
         />
-        <br />
+        <FormFieldSpacer />
         <TextField
           type="number"
           min="1"
@@ -101,7 +103,7 @@ const RoomItemFormDialog: React.FC<{
           }}
           required
         />
-        <br />
+        <FormFieldSpacer />
         <TextField
           multiline
           name="description"

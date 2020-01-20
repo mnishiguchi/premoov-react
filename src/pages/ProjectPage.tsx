@@ -1,5 +1,20 @@
 import React from 'react';
-import { Button, Fab, Grid, IconButton, Paper, Tab, Tabs, Typography } from '@material-ui/core';
+import {
+  Button,
+  Fab,
+  Grid,
+  IconButton,
+  Paper,
+  Tab,
+  Tabs,
+  Typography,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+} from '@material-ui/core';
 import { Alert, AlertTitle } from '@material-ui/lab';
 import AddIcon from '@material-ui/icons/Add';
 import EditIcon from '@material-ui/icons/Edit';
@@ -14,7 +29,7 @@ import RoomItemTable from '../components/RoomItemTable';
 import RoomFormDialog from '../components/RoomFormDialog';
 import RoomItemFormDialog from '../components/RoomItemFormDialog';
 import useToggle from '../components/useToggle';
-import { selectProjectById } from '../redux/selectors';
+import { selectProjectById, sumRoomItemsCount, sumRoomItemsVolume } from '../redux/selectors';
 import { Project, Room, RoomItem } from '../types';
 import SEO from '../components/SEO';
 import PageContainer from '../components/PageContainer';
@@ -36,21 +51,17 @@ const ProjectPage: React.FC<{
   // @ts-ignore
   const { project, rooms, roomItems } = useSelector(selectProjectById(id));
   const dispatch = useDispatch();
-
   const [currentRoomId, setCurrentRoomId] = React.useState(rooms[0] && rooms[0].id);
-
   const {
     open: openEditProjectModal,
     close: closeEditProjectModal,
     isOpen: isOpenEditProjectModal,
   } = useToggle(false);
-
   const {
     open: openAddRoomModal,
     close: closeAddRoomModal,
     isOpen: isOpenAddRoomModal,
   } = useToggle(false);
-
   const {
     open: openAddRoomItemModal,
     close: closeAddRoomItemModal,
@@ -59,6 +70,7 @@ const ProjectPage: React.FC<{
 
   const changeTab = (event: any, newValue: string) => setCurrentRoomId(newValue);
 
+  // TODO: Optimize using useCallback
   const handleProjectUpdated = (project: Project) => {
     dispatch(updateProjectAction(project));
     toast.success(`"${project.name}" was created`);
@@ -143,6 +155,61 @@ const ProjectPage: React.FC<{
               >
                 <AddIcon />
               </Fab>
+            )}
+          </Grid>
+
+          <Grid item xs={12}>
+            <TableContainer component={Paper}>
+              <Table size="small">
+                <TableHead>
+                  <TableRow>
+                    <TableCell align="center">Total Item Count</TableCell>
+                    <TableCell align="center">Total Volume</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  <TableRow>
+                    <TableCell align="center">{sumRoomItemsCount(roomItems)}</TableCell>
+                    <TableCell align="center">{sumRoomItemsVolume(roomItems)}</TableCell>
+                  </TableRow>
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Grid>
+
+          <Grid item xs={12}>
+            {rooms.length > 0 && (
+              <TableContainer component={Paper}>
+                <Table size="small">
+                  <TableHead>
+                    <TableRow>
+                      <TableCell align="left">Room</TableCell>
+                      <TableCell align="center">Item Count</TableCell>
+                      <TableCell align="center">Volume</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {rooms.map(room => {
+                      const filteredRoomItems = roomItems.filter(
+                        (roomItem: RoomItem) => roomItem.roomId === room.id
+                      );
+                      return (
+                        <TableRow key={room.name}>
+                          <TableCell align="left" component="th" scope="room">
+                            {room.name}
+                          </TableCell>
+                          <TableCell align="center">
+                            {sumRoomItemsCount(filteredRoomItems)}
+                          </TableCell>
+                          <TableCell align="center">
+                            {sumRoomItemsVolume(filteredRoomItems)}
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })}
+                  </TableBody>
+                </Table>
+              </TableContainer>
             )}
           </Grid>
 

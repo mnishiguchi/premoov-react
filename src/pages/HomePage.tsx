@@ -11,18 +11,23 @@ import PageContainer from '../components/PageContainer';
 import AppHeader from '../components/AppHeader';
 import useToggle from '../components/useToggle';
 import { createProjectAction } from '../redux/actions';
+import { createFilterRoomsByProjectId, createFilterRoomItemsByProjectId } from '../redux/selectors';
+import { sumRoomItemsCount, sumRoomItemsVolume } from '../redux/selectors';
 
 const HomePage: React.FC = () => {
   const dispatch = useDispatch();
 
   // @ts-ignore
-  const projects = useSelector(state => state.projects);
+  const { projects, rooms, roomItems } = useSelector(state => state);
 
   const {
     open: openAddProjectModal,
     close: closeAddProjectModal,
     isOpen: isOpenAddProjectModal,
   } = useToggle(false);
+
+  const filterRoomsByProjectId = createFilterRoomsByProjectId(rooms);
+  const filterRoomItemsByProjectId = createFilterRoomItemsByProjectId(roomItems);
 
   return (
     <>
@@ -36,26 +41,39 @@ const HomePage: React.FC = () => {
       <PageContainer>
         <SEO />
 
-        {projects.map((project: Project) => (
-          <Card key={project.id} style={{ marginBottom: '1rem' }}>
-            <CardContent>
-              <Typography variant="h5" gutterBottom>
-                {project.name}
-              </Typography>
-              <Typography variant="body2">{project.description}</Typography>
-            </CardContent>
-            <CardActions>
-              <Button
-                component={Link}
-                to={`/projects/${project.id}`}
-                variant="contained"
-                color="primary"
-              >
-                Details
-              </Button>
-            </CardActions>
-          </Card>
-        ))}
+        {projects.map((project: Project) => {
+          const filteredRooms = filterRoomsByProjectId(project.id);
+          const filteredRoomItems = filterRoomItemsByProjectId(project.id);
+          return (
+            <Card key={project.id} style={{ marginBottom: '1rem' }}>
+              <CardContent>
+                <Typography variant="h5" gutterBottom>
+                  {project.name}
+                </Typography>
+                <Typography variant="body2">{project.description}</Typography>
+                <Typography variant="body2">
+                  <strong>Room Count</strong>: {filteredRooms.length}
+                </Typography>
+                <Typography variant="body2">
+                  <strong>Item Count</strong>: {sumRoomItemsCount(filteredRoomItems)}
+                </Typography>
+                <Typography variant="body2">
+                  <strong>Volume</strong>: {sumRoomItemsVolume(filteredRoomItems)}
+                </Typography>
+              </CardContent>
+              <CardActions>
+                <Button
+                  component={Link}
+                  to={`/projects/${project.id}`}
+                  variant="contained"
+                  color="primary"
+                >
+                  Details
+                </Button>
+              </CardActions>
+            </Card>
+          );
+        })}
       </PageContainer>
 
       <div className="pm-Modals">

@@ -60,14 +60,10 @@ const RoomItemTable: React.FC<{
                 <TableCell align="right">{row.volume * row.count}</TableCell>
                 <TableCell align="right">
                   <ButtonGroup variant="text">
-                    <IconButton
-                      onClick={() => onRoomItemCountDecremented(row.id)}
-                    >
+                    <IconButton onClick={() => onRoomItemCountDecremented(row.id)}>
                       <RemoveIcon />
                     </IconButton>
-                    <IconButton
-                      onClick={() => onRoomItemCountIncremented(row.id)}
-                    >
+                    <IconButton onClick={() => onRoomItemCountIncremented(row.id)}>
                       <AddIcon />
                     </IconButton>
                     <IconButton onClick={() => openModal(row.name)}>

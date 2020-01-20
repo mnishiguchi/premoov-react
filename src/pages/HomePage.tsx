@@ -1,15 +1,8 @@
 import React from 'react';
-import {
-  Button,
-  Card,
-  CardActions,
-  CardContent,
-  Typography,
-} from '@material-ui/core';
+import { Button, Card, CardActions, CardContent, Typography } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import { Link } from '@reach/router';
 import { useSelector, useDispatch } from 'react-redux';
-import shortid from 'shortid';
 
 import ProjectFormDialog from '../components/ProjectFormDialog';
 import SEO from '../components/SEO';
@@ -17,6 +10,7 @@ import { Project } from '../types';
 import PageContainer from '../components/PageContainer';
 import AppHeader from '../components/AppHeader';
 import useToggle from '../components/useToggle';
+import { createProjectAction } from '../redux/actions';
 
 const HomePage: React.FC = () => {
   const dispatch = useDispatch();
@@ -29,18 +23,6 @@ const HomePage: React.FC = () => {
     close: closeAddProjectModal,
     isOpen: isOpenAddProjectModal,
   } = useToggle(false);
-
-  const handleProjectAdded = ({ name, description }: Project) =>
-    dispatch({
-      type: 'CREATE_PROJECT',
-      payload: {
-        project: {
-          name,
-          description,
-          id: shortid.generate(),
-        } as Project,
-      },
-    });
 
   return (
     <>
@@ -82,7 +64,7 @@ const HomePage: React.FC = () => {
           onClose={closeAddProjectModal}
           onSubmit={(project: Project, { resetForm }: any) => {
             closeAddProjectModal();
-            handleProjectAdded(project);
+            dispatch(createProjectAction(project));
             resetForm();
           }}
           title={`Add Project`}

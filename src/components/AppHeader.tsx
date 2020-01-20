@@ -20,10 +20,7 @@ const AppHeader: React.FC = ({ children }) => {
         </span>
         <span>
           {children}
-          <Button
-            color="inherit"
-            onClick={e => setMenuAnchorEl(e.currentTarget)}
-          >
+          <Button color="inherit" onClick={e => setMenuAnchorEl(e.currentTarget)}>
             <SettingsIcon />
           </Button>
         </span>

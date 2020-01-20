@@ -15,7 +15,5 @@ export const selectProjectById: selectProjectByIdType = (productId: string) => (
 ) => ({
   project: state.projects.find((project: Project) => project.id === productId),
   rooms: state.rooms.filter((room: Room) => room.projectId === productId),
-  roomItems: state.roomItems.filter(
-    (roomItem: RoomItem) => roomItem.projectId === productId
-  ),
+  roomItems: state.roomItems.filter((roomItem: RoomItem) => roomItem.projectId === productId),
 });

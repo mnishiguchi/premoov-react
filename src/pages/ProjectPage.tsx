@@ -28,6 +28,16 @@ import { Project, Room, RoomItem } from '../types';
 import SEO from '../components/SEO';
 import PageContainer from '../components/PageContainer';
 import AppHeader from '../components/AppHeader';
+import {
+  updateProjectAction,
+  deleteProjectAction,
+  createRoomAction,
+  createRoomItemAction,
+  updateRoomItemAction,
+  deleteRoomItemAction,
+  incrementRoomItemCountAction,
+  decrementRoomItemCountAction,
+} from '../redux/actions';
 
 const ProjectPage: React.FC<{
   id: string;
@@ -36,9 +46,7 @@ const ProjectPage: React.FC<{
   const { project, rooms, roomItems } = useSelector(selectProjectById(id));
   const dispatch = useDispatch();
 
-  const [currentRoomId, setCurrentRoomId] = React.useState(
-    rooms[0] && rooms[0].id
-  );
+  const [currentRoomId, setCurrentRoomId] = React.useState(rooms[0] && rooms[0].id);
 
   const {
     open: openEditProjectModal,
@@ -58,6 +66,45 @@ const ProjectPage: React.FC<{
     isOpen: isOpenAddRoomItemModal,
   } = useToggle(false);
 
+  const changeTab = (event: any, newValue: string) => setCurrentRoomId(newValue);
+
+  const handleProjectUpdated = (project: Project) => {
+    dispatch(updateProjectAction(project));
+    toast.success(`"${project.name}" was created`);
+  };
+
+  const handleProjectDeleted = (projectId: string) => {
+    const projectName = project!.name;
+    dispatch(deleteProjectAction(projectId));
+    toast.success(`"${projectName}" was deleted`);
+  };
+
+  const handleRoomAdded = (room: Room) => {
+    dispatch(createRoomAction(room, project!.id));
+    toast.success(`${room.name} was created`);
+  };
+
+  const handleRoomItemAdded = (roomItem: RoomItem) => {
+    dispatch(createRoomItemAction(roomItem, currentRoomId, project!.id));
+    toast.success(`${roomItem.name} was created`);
+  };
+
+  const handleRoomItemUpdated = (roomItem: RoomItem) => {
+    dispatch(updateRoomItemAction(roomItem));
+    toast.success(`${roomItem.name} was created`);
+  };
+
+  const handleRoomItemDeleted = (roomItemId: string) => {
+    dispatch(deleteRoomItemAction(roomItemId));
+    toast.success(`Item was deleted`);
+  };
+
+  const handleRoomItemCountIncremented = (roomItemId: string) =>
+    dispatch(incrementRoomItemCountAction(roomItemId));
+
+  const handleRoomItemCountDecremented = (roomItemId: string) =>
+    dispatch(decrementRoomItemCountAction(roomItemId));
+
   const shouldRedirect = !project;
   if (shouldRedirect) {
     navigate(`/`);
@@ -66,94 +113,6 @@ const ProjectPage: React.FC<{
 
   const pageTitle = project!.name;
   const currentRoom = rooms.find(r => r.id === currentRoomId);
-
-  const changeTab = (event: any, newValue: string) =>
-    setCurrentRoomId(newValue);
-
-  const handleProjectUpdated = (project: Project) => {
-    dispatch({
-      type: 'UPDATE_PROJECT',
-      payload: { project },
-    });
-    toast.success(`"${project.name}" was created`);
-  };
-
-  const handleProjectDeleted = (projectId: string) => {
-    const projectName = project!.name;
-    dispatch({
-      type: 'DELETE_PROJECT',
-      payload: { projectId },
-    });
-    toast.success(`"${projectName}" was deleted`);
-  };
-
-  const handleRoomAdded = ({ name, description }: Room) => {
-    const newRoomId = shortid.generate();
-    dispatch({
-      type: 'CREATE_ROOM',
-      payload: {
-        room: {
-          name,
-          description,
-          id: newRoomId,
-          projectId: project!.id,
-        } as Room,
-      },
-    });
-    setCurrentRoomId(newRoomId);
-    toast.success(`${name} was created`);
-  };
-
-  const handleRoomItemAdded = ({
-    name,
-    description,
-    volume,
-    count,
-  }: RoomItem) => {
-    dispatch({
-      type: 'CREATE_ROOM_ITEM',
-      payload: {
-        roomItem: {
-          name,
-          description,
-          volume,
-          count,
-          id: shortid.generate(),
-          projectId: project!.id,
-          roomId: currentRoomId,
-        } as RoomItem,
-      },
-    });
-    toast.success(`${name} was created`);
-  };
-
-  const handleRoomItemCountIncremented = (roomItemId: string) =>
-    dispatch({
-      type: 'INCREMENT_ROOM_ITEM_COUNT',
-      payload: { roomItemId },
-    });
-
-  const handleRoomItemCountDecremented = (roomItemId: string) =>
-    dispatch({
-      type: 'DECREMENT_ROOM_ITEM_COUNT',
-      payload: { roomItemId },
-    });
-
-  const handleRoomItemUpdated = (roomItem: RoomItem) => {
-    dispatch({
-      type: 'UPDATE_ROOM_ITEM',
-      payload: { roomItem },
-    });
-    toast.success(`${roomItem.name} was created`);
-  };
-
-  const handleRoomItemDeleted = (roomItemId: string) => {
-    dispatch({
-      type: 'DELETE_ROOM_ITEM',
-      payload: { roomItemId },
-    });
-    toast.success(`Item was deleted`);
-  };
 
   return (
     <>
@@ -186,11 +145,7 @@ const ProjectPage: React.FC<{
 
           <Grid item xs={4}>
             {rooms.length > 0 && (
-              <Fab
-                color="primary"
-                onClick={openAddRoomItemModal}
-                style={{ float: 'right' }}
-              >
+              <Fab color="primary" onClick={openAddRoomItemModal} style={{ float: 'right' }}>
                 <AddIcon />
               </Fab>
             )}
@@ -223,12 +178,8 @@ const ProjectPage: React.FC<{
                       {currentRoomId === id && (
                         <RoomItemTable
                           rows={filteredRoomItems}
-                          onRoomItemCountIncremented={
-                            handleRoomItemCountIncremented
-                          }
-                          onRoomItemCountDecremented={
-                            handleRoomItemCountDecremented
-                          }
+                          onRoomItemCountIncremented={handleRoomItemCountIncremented}
+                          onRoomItemCountDecremented={handleRoomItemCountDecremented}
                           onRoomItemUpdated={handleRoomItemUpdated}
                           onRoomItemDeleted={handleRoomItemDeleted}
                         />

@@ -20,14 +20,7 @@ const ProjectFormDialog: React.FC<{
   onSubmit: (e: any, others: {}) => void;
   initialValues?: any;
 }> = ({ onSubmit, initialValues = {}, title, isOpen, onClose }) => {
-  const {
-    values,
-    errors,
-    touched,
-    handleChange,
-    handleSubmit,
-    isSubmitting,
-  } = useFormik({
+  const { values, errors, touched, handleChange, handleSubmit, isSubmitting } = useFormik({
     onSubmit,
     initialValues: {
       name: '',

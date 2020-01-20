@@ -14,6 +14,7 @@ import useToggle from '../components/useToggle';
 import { Room } from '../types';
 import PageContainer from '../components/PageContainer';
 import AppHeader from '../components/AppHeader';
+import { createRoomAction, updateRoomAction, deleteRoomAction } from '../redux/actions';
 
 const RoomsPage: React.FC<{
   projectId: string;
@@ -27,39 +28,18 @@ const RoomsPage: React.FC<{
     isOpen: isOpenAddRoomModal,
   } = useToggle(false);
 
-  const handleRoomAdded = ({ name, description }: Room) => {
-    const newRoomId = shortid.generate();
-    dispatch({
-      type: 'CREATE_ROOM',
-      payload: {
-        room: {
-          name,
-          description,
-          id: newRoomId,
-          projectId: project!.id,
-        } as Room,
-      },
-    });
-    toast.success(`${name} was created`);
+  const handleRoomAdded = (room: Room, projectId: string) => {
+    dispatch(createRoomAction(room, projectId));
+    toast.success(`${room.name} was created`);
   };
 
   const handleRoomUpdated = (room: Room) => {
-    dispatch({
-      type: 'UPDATE_ROOM',
-      payload: {
-        room,
-      },
-    });
+    dispatch(updateRoomAction(room));
     toast.success(`${room.name} was updated`);
   };
 
   const handleRoomDeleted = (roomId: string) => {
-    dispatch({
-      type: 'DELETE_ROOM',
-      payload: {
-        roomId,
-      },
-    });
+    dispatch(deleteRoomAction(roomId));
     toast.success(`Room was deleted`);
   };
 
@@ -73,18 +53,13 @@ const RoomsPage: React.FC<{
         <Grid container spacing={3}>
           <Grid item xs={12}>
             <Typography variant="h4" gutterBottom>
-              Rooms of{' '}
-              <Link to={`/projects/${project!.id}`}>{project!.name}</Link>
+              Rooms of <Link to={`/projects/${project!.id}`}>{project!.name}</Link>
             </Typography>
           </Grid>
 
           <Grid item xs={12}>
             {rooms.length > 0 && (
-              <Fab
-                color="primary"
-                style={{ float: 'right' }}
-                onClick={openAddRoomModal}
-              >
+              <Fab color="primary" style={{ float: 'right' }} onClick={openAddRoomModal}>
                 <AddIcon />
               </Fab>
             )}
@@ -107,7 +82,7 @@ const RoomsPage: React.FC<{
               onClose={closeAddRoomModal}
               onSubmit={(room: Room, { resetForm }: any) => {
                 closeAddRoomModal();
-                handleRoomAdded(room);
+                handleRoomAdded(room, projectId);
                 resetForm();
               }}
               title={`Add Room to "${project!.name}"`}

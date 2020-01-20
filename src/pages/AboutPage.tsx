@@ -17,10 +17,9 @@ const AboutPage: React.FC = () => (
         {pageTitle}
       </Typography>
       <Typography variant="body1">
-        Lorem ipsum dolor sit amet consectetur, adipisicing elit. Fugit hic,
-        officiis ab rem aliquid minus maiores doloremque consequuntur omnis,
-        consequatur explicabo debitis veniam possimus culpa voluptates sint.
-        Beatae, dolores perspiciatis?
+        Lorem ipsum dolor sit amet consectetur, adipisicing elit. Fugit hic, officiis ab rem aliquid
+        minus maiores doloremque consequuntur omnis, consequatur explicabo debitis veniam possimus
+        culpa voluptates sint. Beatae, dolores perspiciatis?
       </Typography>
     </PageContainer>
   </>

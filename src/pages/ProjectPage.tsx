@@ -1,18 +1,9 @@
 import React from 'react';
-import {
-  Button,
-  Fab,
-  Grid,
-  IconButton,
-  Paper,
-  Tab,
-  Tabs,
-  Toolbar,
-  Typography,
-} from '@material-ui/core';
+import { Button, Fab, Grid, IconButton, Paper, Tab, Tabs, Typography } from '@material-ui/core';
 import { Alert, AlertTitle } from '@material-ui/lab';
 import AddIcon from '@material-ui/icons/Add';
 import EditIcon from '@material-ui/icons/Edit';
+import DeleteIcon from '@material-ui/icons/Delete';
 import { Link, navigate } from '@reach/router';
 import { useSelector, useDispatch } from 'react-redux';
 import shortid from 'shortid';
@@ -116,7 +107,17 @@ const ProjectPage: React.FC<{
 
   return (
     <>
-      <AppHeader></AppHeader>
+      <AppHeader>
+        {rooms.length > 0 && (
+          <Button color="inherit" component={Link} to={`/projects/${project!.id}/rooms`}>
+            Rooms
+          </Button>
+        )}
+        <Button color="inherit" onClick={openAddRoomModal}>
+          <AddIcon />
+          Add room
+        </Button>
+      </AppHeader>
 
       <PageContainer>
         <SEO title={pageTitle} />
@@ -132,20 +133,14 @@ const ProjectPage: React.FC<{
             <Typography variant="body1">{project!.description}</Typography>
           </Grid>
 
-          <Grid item xs={8}>
-            <Toolbar>
-              {rooms.length > 0 && (
-                <Button component={Link} to={`/projects/${project!.id}/rooms`}>
-                  Rooms
-                </Button>
-              )}
-              <Button onClick={openAddRoomModal}>Add room</Button>
-            </Toolbar>
-          </Grid>
-
-          <Grid item xs={4}>
+          <Grid item xs={12}>
             {rooms.length > 0 && (
-              <Fab color="primary" onClick={openAddRoomItemModal} style={{ float: 'right' }}>
+              <Fab
+                color="primary"
+                onClick={openAddRoomItemModal}
+                style={{ float: 'right' }}
+                title="Add item to selected room"
+              >
                 <AddIcon />
               </Fab>
             )}
@@ -195,12 +190,14 @@ const ProjectPage: React.FC<{
             <Alert severity="warning">
               <AlertTitle>Danger Zone</AlertTitle>
               <Button
+                color="inherit"
                 onClick={() => {
                   if (window.confirm(`Deleting ${project!.name}. OK?`)) {
                     handleProjectDeleted(project!.id);
                   }
                 }}
               >
+                <DeleteIcon />
                 Delete {project!.name}
               </Button>
             </Alert>

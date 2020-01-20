@@ -27,6 +27,7 @@ import { selectProjectById } from '../redux/selectors';
 import { Project, Room, RoomItem } from '../types';
 import SEO from '../components/SEO';
 import PageContainer from '../components/PageContainer';
+import AppHeader from '../components/AppHeader';
 
 const ProjectPage: React.FC<{
   id: string;
@@ -155,148 +156,152 @@ const ProjectPage: React.FC<{
   };
 
   return (
-    <PageContainer>
-      <SEO title={pageTitle} />
+    <>
+      <AppHeader></AppHeader>
 
-      <Grid container spacing={3}>
-        <Grid item xs={12}>
-          <Typography variant="h4" gutterBottom>
-            {pageTitle}
-            <IconButton color="primary">
-              <EditIcon onClick={openEditProjectModal} />
-            </IconButton>
-          </Typography>
-          <Typography variant="body1">{project!.description}</Typography>
-        </Grid>
+      <PageContainer>
+        <SEO title={pageTitle} />
 
-        <Grid item xs={8}>
-          <Toolbar>
-            {rooms.length > 0 && (
-              <Button component={Link} to={`/projects/${project!.id}/rooms`}>
-                Rooms
-              </Button>
-            )}
-            <Button onClick={openAddRoomModal}>Add room</Button>
-          </Toolbar>
-        </Grid>
-
-        <Grid item xs={4}>
-          {rooms.length > 0 && (
-            <Fab
-              color="primary"
-              onClick={openAddRoomItemModal}
-              style={{ float: 'right' }}
-            >
-              <AddIcon />
-            </Fab>
-          )}
-        </Grid>
-
-        {rooms.length > 0 && (
+        <Grid container spacing={3}>
           <Grid item xs={12}>
-            <Paper square>
-              <Tabs
-                value={currentRoomId}
-                onChange={changeTab}
-                variant="scrollable"
-                scrollButtons="auto"
-              >
-                {rooms.map((room: Room, index: number) => (
-                  <Tab
-                    label={room.name}
-                    key={room.name}
-                    title={room.description}
-                    value={room.id}
-                  />
-                ))}
-              </Tabs>
-              {rooms.map(({ id }: Room, index: number) => {
-                const filteredRoomItems = roomItems.filter(
-                  (roomItem: RoomItem) => roomItem.roomId === id
-                );
-                return (
-                  <div key={index}>
-                    {currentRoomId === id && (
-                      <RoomItemTable
-                        rows={filteredRoomItems}
-                        onRoomItemCountIncremented={
-                          handleRoomItemCountIncremented
-                        }
-                        onRoomItemCountDecremented={
-                          handleRoomItemCountDecremented
-                        }
-                        onRoomItemUpdated={handleRoomItemUpdated}
-                        onRoomItemDeleted={handleRoomItemDeleted}
-                      />
-                    )}
-                  </div>
-                );
-              })}
-            </Paper>
+            <Typography variant="h4" gutterBottom>
+              {pageTitle}
+              <IconButton color="primary">
+                <EditIcon onClick={openEditProjectModal} />
+              </IconButton>
+            </Typography>
+            <Typography variant="body1">{project!.description}</Typography>
           </Grid>
-        )}
 
-        <Grid item xs={12}>
-          <Alert severity="warning">
-            <AlertTitle>Danger Zone</AlertTitle>
-            <Button
-              onClick={() => {
-                if (window.confirm(`Deleting ${project!.name}. OK?`)) {
-                  handleProjectDeleted(project!.id);
-                }
-              }}
-            >
-              Delete {project!.name}
-            </Button>
-          </Alert>
+          <Grid item xs={8}>
+            <Toolbar>
+              {rooms.length > 0 && (
+                <Button component={Link} to={`/projects/${project!.id}/rooms`}>
+                  Rooms
+                </Button>
+              )}
+              <Button onClick={openAddRoomModal}>Add room</Button>
+            </Toolbar>
+          </Grid>
+
+          <Grid item xs={4}>
+            {rooms.length > 0 && (
+              <Fab
+                color="primary"
+                onClick={openAddRoomItemModal}
+                style={{ float: 'right' }}
+              >
+                <AddIcon />
+              </Fab>
+            )}
+          </Grid>
+
+          {rooms.length > 0 && (
+            <Grid item xs={12}>
+              <Paper square>
+                <Tabs
+                  value={currentRoomId}
+                  onChange={changeTab}
+                  variant="scrollable"
+                  scrollButtons="auto"
+                >
+                  {rooms.map((room: Room, index: number) => (
+                    <Tab
+                      label={room.name}
+                      key={room.name}
+                      title={room.description}
+                      value={room.id}
+                    />
+                  ))}
+                </Tabs>
+                {rooms.map(({ id }: Room, index: number) => {
+                  const filteredRoomItems = roomItems.filter(
+                    (roomItem: RoomItem) => roomItem.roomId === id
+                  );
+                  return (
+                    <div key={index}>
+                      {currentRoomId === id && (
+                        <RoomItemTable
+                          rows={filteredRoomItems}
+                          onRoomItemCountIncremented={
+                            handleRoomItemCountIncremented
+                          }
+                          onRoomItemCountDecremented={
+                            handleRoomItemCountDecremented
+                          }
+                          onRoomItemUpdated={handleRoomItemUpdated}
+                          onRoomItemDeleted={handleRoomItemDeleted}
+                        />
+                      )}
+                    </div>
+                  );
+                })}
+              </Paper>
+            </Grid>
+          )}
+
+          <Grid item xs={12}>
+            <Alert severity="warning">
+              <AlertTitle>Danger Zone</AlertTitle>
+              <Button
+                onClick={() => {
+                  if (window.confirm(`Deleting ${project!.name}. OK?`)) {
+                    handleProjectDeleted(project!.id);
+                  }
+                }}
+              >
+                Delete {project!.name}
+              </Button>
+            </Alert>
+          </Grid>
         </Grid>
-      </Grid>
 
-      <div className="pm-Modals">
-        {project && (
-          <ProjectFormDialog
-            key={shortid.generate()}
-            isOpen={isOpenEditProjectModal}
-            onClose={closeEditProjectModal}
-            onSubmit={(project: Project, { resetForm }: any) => {
-              closeEditProjectModal();
-              handleProjectUpdated(project);
-              resetForm();
-            }}
-            title={`Edit "${project!.name}"`}
-            initialValues={project}
-          />
-        )}
+        <div className="pm-Modals">
+          {project && (
+            <ProjectFormDialog
+              key={shortid.generate()}
+              isOpen={isOpenEditProjectModal}
+              onClose={closeEditProjectModal}
+              onSubmit={(project: Project, { resetForm }: any) => {
+                closeEditProjectModal();
+                handleProjectUpdated(project);
+                resetForm();
+              }}
+              title={`Edit "${project!.name}"`}
+              initialValues={project}
+            />
+          )}
 
-        {currentRoom && (
-          <RoomItemFormDialog
-            key={shortid.generate()}
-            isOpen={isOpenAddRoomItemModal}
-            onClose={closeAddRoomItemModal}
-            onSubmit={(roomItem: RoomItem, { resetForm }: any) => {
-              closeAddRoomItemModal();
-              handleRoomItemAdded(roomItem);
-              resetForm();
-            }}
-            title={`Add Item to "${currentRoom!.name}"`}
-          />
-        )}
+          {currentRoom && (
+            <RoomItemFormDialog
+              key={shortid.generate()}
+              isOpen={isOpenAddRoomItemModal}
+              onClose={closeAddRoomItemModal}
+              onSubmit={(roomItem: RoomItem, { resetForm }: any) => {
+                closeAddRoomItemModal();
+                handleRoomItemAdded(roomItem);
+                resetForm();
+              }}
+              title={`Add Item to "${currentRoom!.name}"`}
+            />
+          )}
 
-        {project && (
-          <RoomFormDialog
-            key={shortid.generate()}
-            isOpen={isOpenAddRoomModal}
-            onClose={closeAddRoomModal}
-            onSubmit={(room: Room, { resetForm }: any) => {
-              closeAddRoomModal();
-              handleRoomAdded(room);
-              resetForm();
-            }}
-            title={`Add Room to "${project!.name}"`}
-          />
-        )}
-      </div>
-    </PageContainer>
+          {project && (
+            <RoomFormDialog
+              key={shortid.generate()}
+              isOpen={isOpenAddRoomModal}
+              onClose={closeAddRoomModal}
+              onSubmit={(room: Room, { resetForm }: any) => {
+                closeAddRoomModal();
+                handleRoomAdded(room);
+                resetForm();
+              }}
+              title={`Add Room to "${project!.name}"`}
+            />
+          )}
+        </div>
+      </PageContainer>
+    </>
   );
 };
 

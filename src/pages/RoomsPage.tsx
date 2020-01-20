@@ -13,6 +13,7 @@ import RoomFormDialog from '../components/RoomFormDialog';
 import useToggle from '../components/useToggle';
 import { Room } from '../types';
 import PageContainer from '../components/PageContainer';
+import AppHeader from '../components/AppHeader';
 
 const RoomsPage: React.FC<{
   projectId: string;
@@ -63,54 +64,58 @@ const RoomsPage: React.FC<{
   };
 
   return (
-    <PageContainer>
-      <SEO title={`Rooms | ${project!.name}`} />
+    <>
+      <AppHeader></AppHeader>
 
-      <Grid container spacing={3}>
-        <Grid item xs={12}>
-          <Typography variant="h4" gutterBottom>
-            Rooms of{' '}
-            <Link to={`/projects/${project!.id}`}>{project!.name}</Link>
-          </Typography>
+      <PageContainer>
+        <SEO title={`Rooms | ${project!.name}`} />
+
+        <Grid container spacing={3}>
+          <Grid item xs={12}>
+            <Typography variant="h4" gutterBottom>
+              Rooms of{' '}
+              <Link to={`/projects/${project!.id}`}>{project!.name}</Link>
+            </Typography>
+          </Grid>
+
+          <Grid item xs={12}>
+            {rooms.length > 0 && (
+              <Fab
+                color="primary"
+                style={{ float: 'right' }}
+                onClick={openAddRoomModal}
+              >
+                <AddIcon />
+              </Fab>
+            )}
+          </Grid>
+
+          <Grid item xs={12}>
+            <RoomTable
+              rows={rooms}
+              onItemUpdated={handleRoomUpdated}
+              onItemDeleted={handleRoomDeleted}
+            />
+          </Grid>
         </Grid>
 
-        <Grid item xs={12}>
-          {rooms.length > 0 && (
-            <Fab
-              color="primary"
-              style={{ float: 'right' }}
-              onClick={openAddRoomModal}
-            >
-              <AddIcon />
-            </Fab>
+        <div className="pm-Modals">
+          {project && (
+            <RoomFormDialog
+              key={shortid.generate()}
+              isOpen={isOpenAddRoomModal}
+              onClose={closeAddRoomModal}
+              onSubmit={(room: Room, { resetForm }: any) => {
+                closeAddRoomModal();
+                handleRoomAdded(room);
+                resetForm();
+              }}
+              title={`Add Room to "${project!.name}"`}
+            />
           )}
-        </Grid>
-
-        <Grid item xs={12}>
-          <RoomTable
-            rows={rooms}
-            onItemUpdated={handleRoomUpdated}
-            onItemDeleted={handleRoomDeleted}
-          />
-        </Grid>
-      </Grid>
-
-      <div className="pm-Modals">
-        {project && (
-          <RoomFormDialog
-            key={shortid.generate()}
-            isOpen={isOpenAddRoomModal}
-            onClose={closeAddRoomModal}
-            onSubmit={(room: Room, { resetForm }: any) => {
-              closeAddRoomModal();
-              handleRoomAdded(room);
-              resetForm();
-            }}
-            title={`Add Room to "${project!.name}"`}
-          />
-        )}
-      </div>
-    </PageContainer>
+        </div>
+      </PageContainer>
+    </>
   );
 };
 

@@ -1,34 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { navigate } from '@reach/router';
-import { AppBar, Toolbar, Button } from '@material-ui/core';
-import AddIcon from '@material-ui/icons/Add';
-import { useDispatch } from 'react-redux';
-import shortid from 'shortid';
+import { AppBar, Toolbar, Button, Menu, MenuItem } from '@material-ui/core';
+import SettingsIcon from '@material-ui/icons/Settings';
 
-import useToggle from '../components/useToggle';
-import ProjectFormDialog from '../components/ProjectFormDialog';
-import { Project } from '../types';
-
-const AppHeader: React.FC = () => {
-  const dispatch = useDispatch();
-
-  const {
-    open: openAddProjectModal,
-    close: closeAddProjectModal,
-    isOpen: isOpenAddProjectModal,
-  } = useToggle(false);
-
-  const handleProjectAdded = ({ name, description }: Project) =>
-    dispatch({
-      type: 'CREATE_PROJECT',
-      payload: {
-        project: {
-          name,
-          description,
-          id: shortid.generate(),
-        } as Project,
-      },
-    });
+// Defines common UI for the app header. Accepts extra menu buttons as children.
+const AppHeader: React.FC = ({ children }) => {
+  const [menuAnchorEl, setMenuAnchorEl] = useState<HTMLElement | null>(null);
 
   return (
     <AppBar position="static">
@@ -40,32 +17,43 @@ const AppHeader: React.FC = () => {
           <Button color="inherit" onClick={() => navigate('/about')}>
             About
           </Button>
+        </span>
+        <span>
+          {children}
           <Button
             color="inherit"
+            onClick={e => setMenuAnchorEl(e.currentTarget)}
+          >
+            <SettingsIcon />
+          </Button>
+        </span>
+        <Menu
+          id="simple-menu"
+          anchorEl={menuAnchorEl}
+          keepMounted
+          open={Boolean(menuAnchorEl)}
+          onClose={() => {
+            setMenuAnchorEl(null);
+          }}
+        >
+          <MenuItem
+            onClick={() => {
+              console.log(`TODO: Implement settings`);
+              setMenuAnchorEl(null);
+            }}
+          >
+            Settings
+          </MenuItem>
+          <MenuItem
             onClick={() => {
               window.localStorage.clear();
-              navigate('/');
+              setMenuAnchorEl(null);
             }}
           >
             Clear Local Storage
-          </Button>
-        </span>
-        <Button onClick={openAddProjectModal} color="inherit">
-          <AddIcon />
-          Add Project
-        </Button>
+          </MenuItem>
+        </Menu>
       </Toolbar>
-
-      <ProjectFormDialog
-        isOpen={isOpenAddProjectModal}
-        onClose={closeAddProjectModal}
-        onSubmit={(project: Project, { resetForm }: any) => {
-          closeAddProjectModal();
-          handleProjectAdded(project);
-          resetForm();
-        }}
-        title={`Add Project`}
-      />
     </AppBar>
   );
 };

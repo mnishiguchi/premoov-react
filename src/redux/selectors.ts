@@ -1,9 +1,9 @@
-import { AppReduxState, Project, Room, RoomItem } from '../types';
+import { AppState, Project, Room, RoomItem } from '../types';
 
 type selectProjectByIdType = (
   productId: string
 ) => (
-  state: AppReduxState
+  state: AppState
 ) => {
   project?: Project;
   rooms: Room[];
@@ -11,7 +11,7 @@ type selectProjectByIdType = (
 };
 
 export const selectProjectById: selectProjectByIdType = (productId: string) => (
-  state: AppReduxState
+  state: AppState
 ) => ({
   project: state.projects.find((project: Project) => project.id === productId),
   rooms: state.rooms.filter((room: Room) => room.projectId === productId),

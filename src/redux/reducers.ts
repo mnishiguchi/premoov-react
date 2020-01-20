@@ -1,16 +1,31 @@
-//@ts-nocheck
-import { combineReducers } from 'redux';
+import { combineReducers, Reducer } from 'redux';
 
 import { Project, Room, RoomItem } from '../types';
 import fakeData from './fakeData';
 
-const projectsReducer = (state = fakeData.projects || [], action) => {
+type Action =
+  | { type: 'CREATE_PROJECT'; payload: { project: Project } }
+  | { type: 'UPDATE_PROJECT'; payload: { project: Project } }
+  | { type: 'DELETE_PROJECT'; payload: { projectId: string } }
+  | { type: 'CREATE_ROOM'; payload: { room: Room } }
+  | { type: 'UPDATE_ROOM'; payload: { room: Room } }
+  | { type: 'DELETE_ROOM'; payload: { roomId: string } }
+  | { type: 'CREATE_ROOM_ITEM'; payload: { roomItem: RoomItem } }
+  | { type: 'UPDATE_ROOM_ITEM'; payload: { roomItem: RoomItem } }
+  | { type: 'DELETE_ROOM_ITEM'; payload: { roomItemId: string } }
+  | { type: 'INCREMENT_ROOM_ITEM_COUNT'; payload: { roomItemId: string } }
+  | { type: 'DECREMENT_ROOM_ITEM_COUNT'; payload: any }; // For some reason typescript complains.
+
+const projectsReducer: (state: Project[], action: Action) => Project[] = (
+  state = fakeData.projects || [],
+  action
+) => {
   const payload = action.payload;
   let stateIndex = Number.MIN_SAFE_INTEGER;
 
   switch (action.type) {
     case 'CREATE_PROJECT':
-      return [...state, payload.project as Project];
+      return [...state, payload.project];
     case 'UPDATE_PROJECT':
       stateIndex = state.findIndex(
         (project: Project) => project.id === payload.project.id
@@ -27,7 +42,10 @@ const projectsReducer = (state = fakeData.projects || [], action) => {
   }
 };
 
-const roomsReducer = (state = fakeData.rooms || [], action) => {
+const roomsReducer: (state: Room[], action: Action) => Room[] = (
+  state = fakeData.rooms || [],
+  action: Action
+) => {
   const payload = action.payload;
 
   switch (action.type) {
@@ -50,7 +68,10 @@ const roomsReducer = (state = fakeData.rooms || [], action) => {
   }
 };
 
-const roomItemsReducer = (state = fakeData.roomItems || [], action) => {
+const roomItemsReducer: (state: RoomItem[], action: Action) => RoomItem[] = (
+  state = fakeData.roomItems || [],
+  action: Action
+) => {
   const payload = action.payload;
   let stateIndex = Number.MIN_SAFE_INTEGER;
   const findStateIndex = (roomItemId: string) =>
@@ -99,17 +120,22 @@ const roomItemsReducer = (state = fakeData.roomItems || [], action) => {
   }
 };
 
-const settingsReducer = (state = fakeData.settings || {}, action) => {
+// TODO
+const settingsReducer: (state: any, action: Action) => any = (
+  state = fakeData.settings || {},
+  action: Action
+) => {
   switch (action.type) {
-    case 'DO_NOTHING':
     default:
       return state;
   }
 };
 
-export default combineReducers({
-  projects: projectsReducer,
-  rooms: roomsReducer,
-  roomItems: roomItemsReducer,
-  settings: settingsReducer,
+const appReducer = combineReducers({
+  projects: projectsReducer as Reducer<any>,
+  rooms: roomsReducer as Reducer<any>,
+  roomItems: roomItemsReducer as Reducer<any>,
+  settings: settingsReducer as Reducer<any>,
 });
+
+export default appReducer;

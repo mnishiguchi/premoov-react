@@ -20,10 +20,6 @@ const HomePage: React.FC = () => {
     <>
       <SEO />
 
-      <Typography variant="h4" gutterBottom>
-        My Projects
-      </Typography>
-
       {projects.map((project: Project) => (
         <Card key={project.id} style={{ marginBottom: '1rem' }}>
           <CardContent>

@@ -11,13 +11,14 @@ import { useSelector } from 'react-redux';
 
 import SEO from '../components/SEO';
 import { Project } from '../types';
+import PageContainer from '../components/PageContainer';
 
 const HomePage: React.FC = () => {
   // @ts-ignore
   const projects = useSelector(state => state.projects);
 
   return (
-    <>
+    <PageContainer>
       <SEO />
 
       {projects.map((project: Project) => (
@@ -40,7 +41,7 @@ const HomePage: React.FC = () => {
           </CardActions>
         </Card>
       ))}
-    </>
+    </PageContainer>
   );
 };
 

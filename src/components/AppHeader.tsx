@@ -40,6 +40,15 @@ const AppHeader: React.FC = () => {
           <Button color="inherit" onClick={() => navigate('/about')}>
             About
           </Button>
+          <Button
+            color="inherit"
+            onClick={() => {
+              window.localStorage.clear();
+              navigate('/');
+            }}
+          >
+            Clear Local Storage
+          </Button>
         </span>
         <Button onClick={openAddProjectModal} color="inherit">
           <AddIcon />

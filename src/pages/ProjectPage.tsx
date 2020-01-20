@@ -26,6 +26,7 @@ import useToggle from '../components/useToggle';
 import { selectProjectById } from '../redux/selectors';
 import { Project, Room, RoomItem } from '../types';
 import SEO from '../components/SEO';
+import PageContainer from '../components/PageContainer';
 
 const ProjectPage: React.FC<{
   id: string;
@@ -154,7 +155,7 @@ const ProjectPage: React.FC<{
   };
 
   return (
-    <>
+    <PageContainer>
       <SEO title={pageTitle} />
 
       <Grid container spacing={3}>
@@ -295,7 +296,7 @@ const ProjectPage: React.FC<{
           />
         )}
       </div>
-    </>
+    </PageContainer>
   );
 };
 

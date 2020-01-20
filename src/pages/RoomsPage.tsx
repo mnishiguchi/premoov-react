@@ -12,6 +12,7 @@ import RoomTable from '../components/RoomTable';
 import RoomFormDialog from '../components/RoomFormDialog';
 import useToggle from '../components/useToggle';
 import { Room } from '../types';
+import PageContainer from '../components/PageContainer';
 
 const RoomsPage: React.FC<{
   projectId: string;
@@ -62,7 +63,7 @@ const RoomsPage: React.FC<{
   };
 
   return (
-    <>
+    <PageContainer>
       <SEO title={`Rooms | ${project!.name}`} />
 
       <Grid container spacing={3}>
@@ -109,7 +110,7 @@ const RoomsPage: React.FC<{
           />
         )}
       </div>
-    </>
+    </PageContainer>
   );
 };
 

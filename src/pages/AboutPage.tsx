@@ -2,11 +2,12 @@ import React from 'react';
 import { Typography } from '@material-ui/core';
 
 import SEO from '../components/SEO';
+import PageContainer from '../components/PageContainer';
 
 const pageTitle = 'About';
 
 const AboutPage: React.FC = () => (
-  <>
+  <PageContainer>
     <SEO title={pageTitle} />
 
     <Typography variant="h4" gutterBottom>
@@ -18,7 +19,7 @@ const AboutPage: React.FC = () => (
       consequatur explicabo debitis veniam possimus culpa voluptates sint.
       Beatae, dolores perspiciatis?
     </Typography>
-  </>
+  </PageContainer>
 );
 
 export default AboutPage;

@@ -131,11 +131,11 @@ const settingsReducer: (state: any, action: Action) => any = (
   }
 };
 
-const appReducer = combineReducers({
+const rootReducer = combineReducers({
   projects: projectsReducer as Reducer<any>,
   rooms: roomsReducer as Reducer<any>,
   roomItems: roomItemsReducer as Reducer<any>,
   settings: settingsReducer as Reducer<any>,
 });
 
-export default appReducer;
+export default rootReducer;

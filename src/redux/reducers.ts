@@ -1,7 +1,8 @@
 import { combineReducers, Reducer } from 'redux';
 
-import { Project, Room, RoomItem } from '../types';
-import fakeData from './fakeData';
+import { Project, Room, RoomItem, DefaultVolumeLookup } from '../types';
+import fakeData from '../data/fake';
+import defaultVolumeLookup from '../data/api.json';
 import { Action } from './actions';
 
 const projectsReducer: (state: Project[], action: Action) => Project[] = (
@@ -102,8 +103,8 @@ const roomItemsReducer: (state: RoomItem[], action: Action) => RoomItem[] = (
 };
 
 // TODO
-const settingsReducer: (state: any, action: Action) => any = (
-  state = fakeData.settings || {},
+const defaultVolumeLookupReducer: (state: DefaultVolumeLookup, action: Action) => any = (
+  state = defaultVolumeLookup,
   action
 ) => {
   switch (action.type) {
@@ -116,7 +117,7 @@ const rootReducer = combineReducers({
   projects: projectsReducer as Reducer<Project[]>,
   rooms: roomsReducer as Reducer<Room[]>,
   roomItems: roomItemsReducer as Reducer<RoomItem[]>,
-  settings: settingsReducer as Reducer<{}>,
+  defaultVolumeLookup: defaultVolumeLookupReducer as Reducer<DefaultVolumeLookup>,
 });
 
 export default rootReducer;

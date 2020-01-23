@@ -21,9 +21,11 @@ export type RoomItem = {
   description: string;
 };
 
+export type DefaultVolumeLookup = any;
+
 export type AppState = {
   projects: Project[];
   rooms: Room[];
   roomItems: RoomItem[];
-  settings: any;
+  defaultVolumeLookup: DefaultVolumeLookup;
 };

@@ -1,5 +1,13 @@
 import React from 'react';
-import { Button, Card, CardActions, CardContent, Typography } from '@material-ui/core';
+import {
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  MenuItem,
+  ListItemIcon,
+  Typography,
+} from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import { Link } from '@reach/router';
 import { useSelector, useDispatch } from 'react-redux';
@@ -32,10 +40,12 @@ const HomePage: React.FC = () => {
   return (
     <>
       <AppHeader>
-        <Button onClick={() => openAddProjectModal()} color="inherit">
-          <AddIcon />
+        <MenuItem onClick={() => openAddProjectModal()}>
+          <ListItemIcon>
+            <AddIcon />
+          </ListItemIcon>
           Add Project
-        </Button>
+        </MenuItem>
       </AppHeader>
 
       <PageContainer>

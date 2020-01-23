@@ -16,7 +16,10 @@ const projectsReducer: (state: Project[], action: Action) => Project[] = (
     case 'UPDATE_PROJECT':
       stateIndex = state.findIndex((project: Project) => project.id === action.project.id);
       if (stateIndex < 0) throw new Error('project not found');
-      state[stateIndex] = action.project;
+      state[stateIndex] = {
+        ...state[stateIndex],
+        ...action.project,
+      };
       return [...state];
     case 'DELETE_PROJECT':
       return state.filter((project: Project) => project.id !== action.projectId);
@@ -35,7 +38,10 @@ const roomsReducer: (state: Room[], action: Action) => Room[] = (
     case 'UPDATE_ROOM':
       const stateIndex = state.findIndex((room: Room) => room.id === action.room.id);
       if (stateIndex < 0) throw new Error('room not found');
-      state[stateIndex] = action.room;
+      state[stateIndex] = {
+        ...state[stateIndex],
+        ...action.room,
+      };
       return [...state];
     case 'DELETE_ROOM':
       return state.filter((room: Room) => room.id !== action.roomId);
@@ -77,7 +83,10 @@ const roomItemsReducer: (state: RoomItem[], action: Action) => RoomItem[] = (
     case 'UPDATE_ROOM_ITEM':
       stateIndex = findStateIndex(action.roomItem.id);
       if (stateIndex < 0) throw new Error('room item not found');
-      state[stateIndex] = action.roomItem;
+      state[stateIndex] = {
+        ...state[stateIndex],
+        ...action.roomItem,
+      };
       return [...state];
     case 'DELETE_ROOM_ITEM':
       return state.filter((roomItem: RoomItem) => roomItem.id !== action.roomItemId);

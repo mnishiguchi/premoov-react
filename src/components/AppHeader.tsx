@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { navigate } from '@reach/router';
-import { AppBar, Toolbar, Button, Menu, MenuItem } from '@material-ui/core';
+import { AppBar, Toolbar, Button, Menu, MenuItem, ListItemIcon } from '@material-ui/core';
 import SettingsIcon from '@material-ui/icons/Settings';
+import MenuIcon from '@material-ui/icons/Menu';
+import ClearIcon from '@material-ui/icons/Clear';
 
 // Defines common UI for the app header. Accepts extra menu buttons as children.
 const AppHeader: React.FC = ({ children }) => {
@@ -18,38 +20,46 @@ const AppHeader: React.FC = ({ children }) => {
             About
           </Button>
         </span>
+
         <span>
-          {children}
           <Button color="inherit" onClick={e => setMenuAnchorEl(e.currentTarget)}>
-            <SettingsIcon />
+            <MenuIcon />
           </Button>
+          <Menu
+            id="simple-menu"
+            anchorEl={menuAnchorEl}
+            keepMounted
+            open={Boolean(menuAnchorEl)}
+            onClose={() => {
+              setMenuAnchorEl(null);
+            }}
+          >
+            {children}
+
+            <MenuItem
+              onClick={() => {
+                console.log(`TODO: Implement settings`);
+                setMenuAnchorEl(null);
+              }}
+            >
+              <ListItemIcon>
+                <SettingsIcon />
+              </ListItemIcon>
+              Settings
+            </MenuItem>
+            <MenuItem
+              onClick={() => {
+                window.localStorage.clear();
+                setMenuAnchorEl(null);
+              }}
+            >
+              <ListItemIcon>
+                <ClearIcon />
+              </ListItemIcon>
+              Clear Local Storage
+            </MenuItem>
+          </Menu>
         </span>
-        <Menu
-          id="simple-menu"
-          anchorEl={menuAnchorEl}
-          keepMounted
-          open={Boolean(menuAnchorEl)}
-          onClose={() => {
-            setMenuAnchorEl(null);
-          }}
-        >
-          <MenuItem
-            onClick={() => {
-              console.log(`TODO: Implement settings`);
-              setMenuAnchorEl(null);
-            }}
-          >
-            Settings
-          </MenuItem>
-          <MenuItem
-            onClick={() => {
-              window.localStorage.clear();
-              setMenuAnchorEl(null);
-            }}
-          >
-            Clear Local Storage
-          </MenuItem>
-        </Menu>
       </Toolbar>
     </AppBar>
   );

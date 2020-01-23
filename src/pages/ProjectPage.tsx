@@ -1,24 +1,33 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import {
   Button,
+  ExpansionPanel,
+  ExpansionPanelDetails,
+  ExpansionPanelSummary,
   Fab,
   Grid,
   IconButton,
+  ListItemIcon,
+  MenuItem,
   Paper,
   Tab,
-  Tabs,
-  Typography,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
   TableRow,
+  Tabs,
+  TextField,
+  Typography,
 } from '@material-ui/core';
-import { Alert, AlertTitle } from '@material-ui/lab';
 import AddIcon from '@material-ui/icons/Add';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
+import RoomIcon from '@material-ui/icons/Room';
+import NoteIcon from '@material-ui/icons/Note';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import WarningIcon from '@material-ui/icons/Warning';
 import { Link, navigate } from '@reach/router';
 import { useSelector, useDispatch } from 'react-redux';
 import shortid from 'shortid';
@@ -70,43 +79,72 @@ const ProjectPage: React.FC<{
 
   const changeTab = (event: any, newValue: string) => setCurrentRoomId(newValue);
 
-  // TODO: Optimize using useCallback
-  const handleProjectUpdated = (project: Project) => {
-    dispatch(updateProjectAction(project));
-    toast.success(`"${project.name}" was created`);
-  };
+  const handleProjectUpdated = useCallback(
+    (project: Project) => {
+      dispatch(updateProjectAction(project));
+      project.name && toast.success(`"${project.name}" was updated`);
+    },
+    [dispatch]
+  );
 
-  const handleProjectDeleted = (projectId: string) => {
-    const projectName = project!.name;
-    dispatch(deleteProjectAction(projectId));
-    toast.success(`"${projectName}" was deleted`);
-  };
+  const handleProjectDeleted = useCallback(
+    (projectId: string) => {
+      const projectName = project!.name;
+      dispatch(deleteProjectAction(projectId));
+      projectName && toast.success(`"${projectName}" was deleted`);
+    },
+    [dispatch, project]
+  );
 
-  const handleRoomAdded = (room: Room) => {
-    dispatch(createRoomAction(room, project!.id));
-    toast.success(`${room.name} was created`);
-  };
+  // Note: I tried throttle and debounce, but this looks good without any of them.
+  const handleProjectDescriptionUpdated = useCallback(
+    (description: string) => {
+      dispatch(updateProjectAction({ ...project, description } as Project));
+    },
+    [dispatch, project]
+  );
 
-  const handleRoomItemAdded = (roomItem: RoomItem) => {
-    dispatch(createRoomItemAction(roomItem, currentRoomId, project!.id));
-    toast.success(`${roomItem.name} was created`);
-  };
+  const handleRoomAdded = useCallback(
+    (room: Room) => {
+      dispatch(createRoomAction(room, project!.id));
+      room.name && toast.success(`${room.name} was created`);
+    },
+    [dispatch, project]
+  );
 
-  const handleRoomItemUpdated = (roomItem: RoomItem) => {
-    dispatch(updateRoomItemAction(roomItem));
-    toast.success(`${roomItem.name} was created`);
-  };
+  const handleRoomItemAdded = useCallback(
+    (roomItem: RoomItem) => {
+      dispatch(createRoomItemAction(roomItem, currentRoomId, project!.id));
+      roomItem.name && toast.success(`${roomItem.name} was created`);
+    },
+    [dispatch, currentRoomId, project]
+  );
 
-  const handleRoomItemDeleted = (roomItemId: string) => {
-    dispatch(deleteRoomItemAction(roomItemId));
-    toast.success(`Item was deleted`);
-  };
+  const handleRoomItemUpdated = useCallback(
+    (roomItem: RoomItem) => {
+      dispatch(updateRoomItemAction(roomItem));
+      roomItem.name && toast.success(`${roomItem.name} was created`);
+    },
+    [dispatch]
+  );
 
-  const handleRoomItemCountIncremented = (roomItemId: string) =>
-    dispatch(incrementRoomItemCountAction(roomItemId));
+  const handleRoomItemDeleted = useCallback(
+    (roomItemId: string) => {
+      dispatch(deleteRoomItemAction(roomItemId));
+      toast.success(`Item was deleted`);
+    },
+    [dispatch]
+  );
 
-  const handleRoomItemCountDecremented = (roomItemId: string) =>
-    dispatch(decrementRoomItemCountAction(roomItemId));
+  const handleRoomItemCountIncremented = useCallback(
+    (roomItemId: string) => dispatch(incrementRoomItemCountAction(roomItemId)),
+    [dispatch]
+  );
+
+  const handleRoomItemCountDecremented = useCallback(
+    (roomItemId: string) => dispatch(decrementRoomItemCountAction(roomItemId)),
+    [dispatch]
+  );
 
   const shouldRedirect = !project;
   if (shouldRedirect) {
@@ -121,14 +159,19 @@ const ProjectPage: React.FC<{
     <>
       <AppHeader>
         {rooms.length > 0 && (
-          <Button color="inherit" component={Link} to={`/projects/${project!.id}/rooms`}>
+          <MenuItem component={Link} to={`/projects/${project!.id}/rooms`}>
+            <ListItemIcon>
+              <RoomIcon />
+            </ListItemIcon>
             Rooms
-          </Button>
+          </MenuItem>
         )}
-        <Button color="inherit" onClick={openAddRoomModal}>
-          <AddIcon />
+        <MenuItem onClick={openAddRoomModal}>
+          <ListItemIcon>
+            <AddIcon />
+          </ListItemIcon>
           Add room
-        </Button>
+        </MenuItem>
       </AppHeader>
 
       <PageContainer>
@@ -142,7 +185,26 @@ const ProjectPage: React.FC<{
                 <EditIcon onClick={openEditProjectModal} />
               </IconButton>
             </Typography>
-            <Typography variant="body1">{project!.description}</Typography>
+
+            <ExpansionPanel>
+              <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+                <NoteIcon /> <Typography>Memo</Typography>
+              </ExpansionPanelSummary>
+              <ExpansionPanelDetails>
+                <TextField
+                  multiline
+                  name="description"
+                  label="Description"
+                  onChange={(e: any) => handleProjectDescriptionUpdated(e.target.value as string)}
+                  value={project!.description}
+                  rows="10"
+                  fullWidth
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                />
+              </ExpansionPanelDetails>
+            </ExpansionPanel>
           </Grid>
 
           <Grid item xs={12}>
@@ -254,20 +316,24 @@ const ProjectPage: React.FC<{
           )}
 
           <Grid item xs={12}>
-            <Alert severity="warning">
-              <AlertTitle>Danger Zone</AlertTitle>
-              <Button
-                color="inherit"
-                onClick={() => {
-                  if (window.confirm(`Deleting ${project!.name}. OK?`)) {
-                    handleProjectDeleted(project!.id);
-                  }
-                }}
-              >
-                <DeleteIcon />
-                Delete {project!.name}
-              </Button>
-            </Alert>
+            <ExpansionPanel>
+              <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+                <WarningIcon /> <Typography>Danger Zone</Typography>
+              </ExpansionPanelSummary>
+              <ExpansionPanelDetails>
+                <Button
+                  color="secondary"
+                  onClick={() => {
+                    if (window.confirm(`Deleting ${project!.name}. OK?`)) {
+                      handleProjectDeleted(project!.id);
+                    }
+                  }}
+                >
+                  <DeleteIcon />
+                  Delete this project
+                </Button>
+              </ExpansionPanelDetails>
+            </ExpansionPanel>
           </Grid>
         </Grid>
 

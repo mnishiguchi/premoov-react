@@ -9,6 +9,8 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  Slider,
+  FormLabel,
 } from '@material-ui/core';
 
 import FormFieldSpacer from './FormFieldSpacer';
@@ -20,7 +22,15 @@ const RoomItemFormDialog: React.FC<{
   onSubmit: (e: any, others: {}) => void;
   initialValues?: any;
 }> = ({ onSubmit, initialValues = {}, title, isOpen, onClose }) => {
-  const { values, errors, touched, handleChange, handleSubmit, isSubmitting } = useFormik({
+  const {
+    values,
+    errors,
+    touched,
+    handleChange,
+    handleSubmit,
+    isSubmitting,
+    setFieldValue,
+  } = useFormik({
     onSubmit,
     initialValues: {
       name: '',
@@ -51,65 +61,79 @@ const RoomItemFormDialog: React.FC<{
       <div style={{ width: '600px' }} />
 
       <DialogContent>
+        <FormLabel>Name</FormLabel>
         <TextField
           name="name"
-          label="name"
           onChange={handleChange}
           value={values.name}
           error={errors.name && touched.name}
           helperText={errors.name}
           fullWidth
-          InputLabelProps={{
-            shrink: true,
-          }}
           required
         />
         <FormFieldSpacer />
+
+        <FormLabel>Volume</FormLabel>
+        <Slider
+          name="volume"
+          value={values.volume}
+          step={1}
+          marks
+          min={0}
+          max={50}
+          valueLabelDisplay="auto"
+          getAriaValueText={(v: number) => JSON.stringify(v)}
+          onChangeCommitted={(e: any, v: number) => setFieldValue('volume', v)}
+        />
         <TextField
           type="number"
-          min="0"
+          min="1"
           name="volume"
-          label="volume"
           onChange={handleChange}
           value={values.volume}
           error={errors.volume && touched.volume}
           helperText={errors.volume}
           fullWidth
-          InputLabelProps={{
-            shrink: true,
-          }}
           required
         />
         <FormFieldSpacer />
+
+        <FormLabel>Count</FormLabel>
+        <Slider
+          name="count"
+          value={values.count}
+          step={1}
+          marks
+          min={0}
+          max={20}
+          valueLabelDisplay="auto"
+          getAriaValueText={(v: number) => JSON.stringify(v)}
+          onChangeCommitted={(e: any, v: number) => setFieldValue('count', v)}
+        />
+
         <TextField
           type="number"
           min="1"
           name="count"
-          label="count"
           onChange={handleChange}
           value={values.count}
           error={errors.count && touched.count}
           helperText={errors.count}
           fullWidth
-          InputLabelProps={{
-            shrink: true,
-          }}
           required
         />
         <FormFieldSpacer />
+
+        <FormLabel>Description</FormLabel>
         <TextField
           multiline
           name="description"
-          label="Description"
           onChange={handleChange}
           value={values.description}
           rows="10"
           error={errors.description && touched.description}
           helperText={errors.description}
           fullWidth
-          InputLabelProps={{
-            shrink: true,
-          }}
         />
       </DialogContent>
 

@@ -89,11 +89,10 @@ const ProjectPage: React.FC<{
 
   const handleProjectDeleted = useCallback(
     (projectId: string) => {
-      const projectName = project!.name;
       dispatch(deleteProjectAction(projectId));
-      projectName && toast.success(`"${projectName}" was deleted`);
+      toast.success(`A project was deleted`);
     },
-    [dispatch, project]
+    [dispatch]
   );
 
   // Note: I tried throttle and debounce, but this looks good without any of them.
@@ -123,7 +122,7 @@ const ProjectPage: React.FC<{
   const handleRoomItemUpdated = useCallback(
     (roomItem: RoomItem) => {
       dispatch(updateRoomItemAction(roomItem));
-      roomItem.name && toast.success(`${roomItem.name} was created`);
+      roomItem.name && toast.success(`${roomItem.name} was updated`);
     },
     [dispatch]
   );

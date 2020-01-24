@@ -8,6 +8,7 @@ type SelectProjectByIdType = (
   project?: Project;
   rooms: Room[];
   roomItems: RoomItem[];
+  defaultVolumeLookup: any;
 };
 
 export const selectProjectById: SelectProjectByIdType = (productId: string) => (
@@ -16,6 +17,7 @@ export const selectProjectById: SelectProjectByIdType = (productId: string) => (
   project: state.projects.find((project: Project) => project.id === productId),
   rooms: state.rooms.filter((room: Room) => room.projectId === productId),
   roomItems: state.roomItems.filter((roomItem: RoomItem) => roomItem.projectId === productId),
+  defaultVolumeLookup: state.defaultVolumeLookup,
 });
 
 export const selectDefaultRoomItemNames: (state: AppState) => string[] = state =>

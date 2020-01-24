@@ -12,6 +12,7 @@ import {
   Slider,
   FormLabel,
 } from '@material-ui/core';
+import { toast } from 'react-toastify';
 
 import FormFieldSpacer from './FormFieldSpacer';
 
@@ -22,7 +23,16 @@ const RoomItemFormDialog: React.FC<{
   onSubmit: (e: any, others: {}) => void;
   initialValues?: any;
   defaultRoomItemNames: string[];
-}> = ({ onSubmit, title, isOpen, onClose, initialValues = {}, defaultRoomItemNames = [] }) => {
+  defaultVolumeLookup: any;
+}> = ({
+  onSubmit,
+  title,
+  isOpen,
+  onClose,
+  initialValues = {},
+  defaultRoomItemNames = [],
+  defaultVolumeLookup = {},
+}) => {
   const {
     values,
     errors,
@@ -65,7 +75,11 @@ const RoomItemFormDialog: React.FC<{
         <FormLabel>Name</FormLabel>
         <TextField
           name="name"
-          onChange={handleChange}
+          onChange={(e: any) => {
+            handleChange(e);
+            // TODO: Make it human-readable
+            toast.info(JSON.stringify(defaultVolumeLookup[e.target.value]));
+          }}
           value={values.name}
           error={errors.name && touched.name}
           helperText={errors.name}

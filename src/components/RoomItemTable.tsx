@@ -22,6 +22,7 @@ import { RoomItem } from '../types';
 const RoomItemTable: React.FC<{
   rows: RoomItem[];
   defaultRoomItemNames: string[];
+  defaultVolumeLookup: any;
   onRoomItemCountIncremented: (roomItemId: string) => void;
   onRoomItemCountDecremented: (roomItemId: string) => void;
   onRoomItemUpdated: (roomItem: RoomItem) => void;
@@ -29,6 +30,7 @@ const RoomItemTable: React.FC<{
 }> = ({
   rows,
   defaultRoomItemNames,
+  defaultVolumeLookup,
   onRoomItemCountIncremented,
   onRoomItemCountDecremented,
   onRoomItemUpdated,
@@ -95,6 +97,7 @@ const RoomItemTable: React.FC<{
                       }}
                       title={`Edit ${row.name}`}
                       defaultRoomItemNames={defaultRoomItemNames}
+                      defaultVolumeLookup={defaultVolumeLookup}
                     />
                   </div>
                 </TableCell>

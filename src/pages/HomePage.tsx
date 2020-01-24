@@ -20,7 +20,7 @@ import { Project } from '../types';
 import PageContainer from '../components/PageContainer';
 import AppHeader from '../components/AppHeader';
 import useToggle from '../components/useToggle';
-import { createProjectAction, createRoomAction, createRoomItemAction } from '../redux/actions';
+import { createProjectAction, createRoomAction } from '../redux/actions';
 import { createFilterRoomsByProjectId, createFilterRoomItemsByProjectId } from '../redux/selectors';
 import { sumRoomItemsCount, sumRoomItemsVolume } from '../redux/selectors';
 
@@ -60,11 +60,14 @@ const HomePage: React.FC = () => {
     dispatch(createRoomAction(generateFakeRoom(), fakeProject.id));
   }, [dispatch]);
 
-  const handleFormSubmitted = useCallback((project: Project, { resetForm }: any) => {
-    closeAddProjectModal();
-    dispatch(createProjectAction(project));
-    resetForm();
-  }, []);
+  const handleFormSubmitted = useCallback(
+    (project: Project, { resetForm }: any) => {
+      closeAddProjectModal();
+      dispatch(createProjectAction(project));
+      resetForm();
+    },
+    [dispatch, closeAddProjectModal]
+  );
 
   return (
     <>

@@ -4,7 +4,6 @@ import {
   ExpansionPanel,
   ExpansionPanelDetails,
   ExpansionPanelSummary,
-  Fab,
   Grid,
   IconButton,
   ListItemIcon,
@@ -63,7 +62,7 @@ const ProjectPage: React.FC<{
   id: string;
 }> = ({ id }) => {
   // @ts-ignore
-  const { project, rooms, roomItems } = useSelector(selectProjectById(id));
+  const { project, rooms, roomItems, defaultVolumeLookup } = useSelector(selectProjectById(id));
   const defaultRoomItemNames = useSelector(selectDefaultRoomItemNames);
   const dispatch = useDispatch();
   const [currentRoomId, setCurrentRoomId] = React.useState(rooms[0] && rooms[0].id);
@@ -190,39 +189,6 @@ const ProjectPage: React.FC<{
                 <EditIcon onClick={openEditProjectModal} />
               </IconButton>
             </Typography>
-
-            <ExpansionPanel>
-              <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-                <NoteIcon /> <Typography>Memo</Typography>
-              </ExpansionPanelSummary>
-              <ExpansionPanelDetails>
-                <TextField
-                  multiline
-                  name="description"
-                  label="Description"
-                  onChange={(e: any) => handleProjectDescriptionUpdated(e.target.value as string)}
-                  value={project!.description}
-                  rows="10"
-                  fullWidth
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                />
-              </ExpansionPanelDetails>
-            </ExpansionPanel>
-          </Grid>
-
-          <Grid item xs={12}>
-            {rooms.length > 0 && (
-              <Fab
-                color="primary"
-                onClick={openAddRoomItemModal}
-                style={{ float: 'right' }}
-                title="Add item to selected room"
-              >
-                <AddIcon />
-              </Fab>
-            )}
           </Grid>
 
           <Grid item xs={12}>
@@ -280,6 +246,14 @@ const ProjectPage: React.FC<{
             )}
           </Grid>
 
+          <Grid item xs={12}>
+            {rooms.length > 0 && (
+              <Button color="primary" onClick={openAddRoomItemModal} style={{ float: 'right' }}>
+                <AddIcon /> Add item
+              </Button>
+            )}
+          </Grid>
+
           {rooms.length > 0 && (
             <Grid item xs={12}>
               <Paper square>
@@ -308,6 +282,7 @@ const ProjectPage: React.FC<{
                         <RoomItemTable
                           rows={filteredRoomItems}
                           defaultRoomItemNames={defaultRoomItemNames}
+                          defaultVolumeLookup={defaultVolumeLookup}
                           onRoomItemCountIncremented={handleRoomItemCountIncremented}
                           onRoomItemCountDecremented={handleRoomItemCountDecremented}
                           onRoomItemUpdated={handleRoomItemUpdated}
@@ -320,6 +295,24 @@ const ProjectPage: React.FC<{
               </Paper>
             </Grid>
           )}
+
+          <Grid item xs={12}>
+            <ExpansionPanel>
+              <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+                <NoteIcon />
+              </ExpansionPanelSummary>
+              <ExpansionPanelDetails>
+                <TextField
+                  multiline
+                  name="description"
+                  onChange={(e: any) => handleProjectDescriptionUpdated(e.target.value as string)}
+                  value={project!.description}
+                  rows="10"
+                  fullWidth
+                />
+              </ExpansionPanelDetails>
+            </ExpansionPanel>
+          </Grid>
 
           <Grid item xs={12}>
             <ExpansionPanel>
@@ -371,6 +364,7 @@ const ProjectPage: React.FC<{
               }}
               title={`Add Item to "${currentRoom!.name}"`}
               defaultRoomItemNames={defaultRoomItemNames}
+              defaultVolumeLookup={defaultVolumeLookup}
             />
           )}
 

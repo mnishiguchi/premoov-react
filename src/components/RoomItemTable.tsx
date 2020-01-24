@@ -21,12 +21,14 @@ import { RoomItem } from '../types';
 
 const RoomItemTable: React.FC<{
   rows: RoomItem[];
+  defaultRoomItemNames: string[];
   onRoomItemCountIncremented: (roomItemId: string) => void;
   onRoomItemCountDecremented: (roomItemId: string) => void;
   onRoomItemUpdated: (roomItem: RoomItem) => void;
   onRoomItemDeleted: (roomItemId: string) => void;
 }> = ({
   rows,
+  defaultRoomItemNames,
   onRoomItemCountIncremented,
   onRoomItemCountDecremented,
   onRoomItemUpdated,
@@ -92,6 +94,7 @@ const RoomItemTable: React.FC<{
                         resetForm();
                       }}
                       title={`Edit ${row.name}`}
+                      defaultRoomItemNames={defaultRoomItemNames}
                     />
                   </div>
                 </TableCell>

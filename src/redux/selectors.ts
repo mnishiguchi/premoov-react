@@ -1,6 +1,6 @@
 import { AppState, Project, Room, RoomItem } from '../types';
 
-type selectProjectByIdType = (
+type SelectProjectByIdType = (
   productId: string
 ) => (
   state: AppState
@@ -10,13 +10,16 @@ type selectProjectByIdType = (
   roomItems: RoomItem[];
 };
 
-export const selectProjectById: selectProjectByIdType = (productId: string) => (
+export const selectProjectById: SelectProjectByIdType = (productId: string) => (
   state: AppState
 ) => ({
   project: state.projects.find((project: Project) => project.id === productId),
   rooms: state.rooms.filter((room: Room) => room.projectId === productId),
   roomItems: state.roomItems.filter((roomItem: RoomItem) => roomItem.projectId === productId),
 });
+
+export const selectDefaultRoomItemNames: (state: AppState) => string[] = state =>
+  Object.keys(state.defaultVolumeLookup);
 
 export const createFilterRoomsByProjectId = (rooms: Room[]) => (projectId: string) =>
   rooms.filter((room: Room) => room.projectId === projectId);

@@ -21,7 +21,8 @@ const RoomItemFormDialog: React.FC<{
   onClose: (e: any) => void;
   onSubmit: (e: any, others: {}) => void;
   initialValues?: any;
-}> = ({ onSubmit, initialValues = {}, title, isOpen, onClose }) => {
+  defaultRoomItemNames: string[];
+}> = ({ onSubmit, title, isOpen, onClose, initialValues = {}, defaultRoomItemNames = [] }) => {
   const {
     values,
     errors,
@@ -70,7 +71,15 @@ const RoomItemFormDialog: React.FC<{
           helperText={errors.name}
           fullWidth
           required
+          inputProps={{
+            list: 'RoomItemFormDialog-defaultRoomItemNames',
+          }}
         />
+        <datalist id="RoomItemFormDialog-defaultRoomItemNames">
+          {defaultRoomItemNames.map(defaultRoomItemName => (
+            <option key={defaultRoomItemName} value={defaultRoomItemName} />
+          ))}
+        </datalist>
         <FormFieldSpacer />
 
         <FormLabel>Volume</FormLabel>

@@ -38,7 +38,12 @@ import RoomItemTable from '../components/RoomItemTable';
 import RoomFormDialog from '../components/RoomFormDialog';
 import RoomItemFormDialog from '../components/RoomItemFormDialog';
 import useToggle from '../components/useToggle';
-import { selectProjectById, sumRoomItemsCount, sumRoomItemsVolume } from '../redux/selectors';
+import {
+  selectProjectById,
+  selectDefaultRoomItemNames,
+  sumRoomItemsCount,
+  sumRoomItemsVolume,
+} from '../redux/selectors';
 import { Project, Room, RoomItem } from '../types';
 import SEO from '../components/SEO';
 import PageContainer from '../components/PageContainer';
@@ -59,6 +64,7 @@ const ProjectPage: React.FC<{
 }> = ({ id }) => {
   // @ts-ignore
   const { project, rooms, roomItems } = useSelector(selectProjectById(id));
+  const defaultRoomItemNames = useSelector(selectDefaultRoomItemNames);
   const dispatch = useDispatch();
   const [currentRoomId, setCurrentRoomId] = React.useState(rooms[0] && rooms[0].id);
   const {
@@ -301,6 +307,7 @@ const ProjectPage: React.FC<{
                       {currentRoomId === id && (
                         <RoomItemTable
                           rows={filteredRoomItems}
+                          defaultRoomItemNames={defaultRoomItemNames}
                           onRoomItemCountIncremented={handleRoomItemCountIncremented}
                           onRoomItemCountDecremented={handleRoomItemCountDecremented}
                           onRoomItemUpdated={handleRoomItemUpdated}
@@ -363,6 +370,7 @@ const ProjectPage: React.FC<{
                 resetForm();
               }}
               title={`Add Item to "${currentRoom!.name}"`}
+              defaultRoomItemNames={defaultRoomItemNames}
             />
           )}
 

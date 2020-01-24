@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo, useCallback } from 'react';
 import {
   Button,
   Card,
@@ -11,6 +11,8 @@ import {
 import AddIcon from '@material-ui/icons/Add';
 import { Link } from '@reach/router';
 import { useSelector, useDispatch } from 'react-redux';
+import faker from 'faker';
+import shortid from 'shortid';
 
 import ProjectFormDialog from '../components/ProjectFormDialog';
 import SEO from '../components/SEO';
@@ -18,9 +20,22 @@ import { Project } from '../types';
 import PageContainer from '../components/PageContainer';
 import AppHeader from '../components/AppHeader';
 import useToggle from '../components/useToggle';
-import { createProjectAction } from '../redux/actions';
+import { createProjectAction, createRoomAction, createRoomItemAction } from '../redux/actions';
 import { createFilterRoomsByProjectId, createFilterRoomItemsByProjectId } from '../redux/selectors';
 import { sumRoomItemsCount, sumRoomItemsVolume } from '../redux/selectors';
+
+const generateFakeProject = () => ({
+  id: shortid.generate(),
+  name: faker.hacker.phrase(),
+  description: faker.lorem.paragraphs(2),
+});
+
+const generateFakeRoom = (projectId?: string) => ({
+  id: shortid.generate(),
+  name: faker.hacker.phrase(),
+  description: faker.lorem.paragraphs(2),
+  projectId: shortid.generate(),
+});
 
 const HomePage: React.FC = () => {
   const dispatch = useDispatch();
@@ -34,17 +49,38 @@ const HomePage: React.FC = () => {
     isOpen: isOpenAddProjectModal,
   } = useToggle(false);
 
-  const filterRoomsByProjectId = createFilterRoomsByProjectId(rooms);
-  const filterRoomItemsByProjectId = createFilterRoomItemsByProjectId(roomItems);
+  const filterRoomsByProjectId = useMemo(() => createFilterRoomsByProjectId(rooms), [rooms]);
+  const filterRoomItemsByProjectId = useMemo(() => createFilterRoomItemsByProjectId(roomItems), [
+    roomItems,
+  ]);
+
+  const handleFakeProjectCreated = useCallback(() => {
+    const fakeProject = generateFakeProject();
+    dispatch(createProjectAction(fakeProject));
+    dispatch(createRoomAction(generateFakeRoom(), fakeProject.id));
+  }, [dispatch]);
+
+  const handleFormSubmitted = useCallback((project: Project, { resetForm }: any) => {
+    closeAddProjectModal();
+    dispatch(createProjectAction(project));
+    resetForm();
+  }, []);
 
   return (
     <>
       <AppHeader>
-        <MenuItem onClick={() => openAddProjectModal()}>
+        <MenuItem onClick={openAddProjectModal}>
           <ListItemIcon>
             <AddIcon />
           </ListItemIcon>
           Add Project
+        </MenuItem>
+
+        <MenuItem onClick={handleFakeProjectCreated}>
+          <ListItemIcon>
+            <AddIcon />
+          </ListItemIcon>
+          Add Fake Project
         </MenuItem>
       </AppHeader>
 
@@ -90,11 +126,7 @@ const HomePage: React.FC = () => {
         <ProjectFormDialog
           isOpen={isOpenAddProjectModal}
           onClose={closeAddProjectModal}
-          onSubmit={(project: Project, { resetForm }: any) => {
-            closeAddProjectModal();
-            dispatch(createProjectAction(project));
-            resetForm();
-          }}
+          onSubmit={handleFormSubmitted}
           title={`Add Project`}
         />
       </div>

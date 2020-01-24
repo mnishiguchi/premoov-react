@@ -1,16 +1,11 @@
 import { combineReducers, Reducer } from 'redux';
 
 import { Project, Room, RoomItem, DefaultVolumeLookup } from '../types';
-import fakeData from '../data/fake';
 import defaultVolumeLookup from '../data/api.json';
 import { Action } from './actions';
 
-const projectsReducer: (state: Project[], action: Action) => Project[] = (
-  state = fakeData.projects || [],
-  action
-) => {
+const projectsReducer: (state: Project[], action: Action) => Project[] = (state = [], action) => {
   let stateIndex = Number.MIN_SAFE_INTEGER;
-
   switch (action.type) {
     case 'CREATE_PROJECT':
       return [...state, action.project];
@@ -29,10 +24,7 @@ const projectsReducer: (state: Project[], action: Action) => Project[] = (
   }
 };
 
-const roomsReducer: (state: Room[], action: Action) => Room[] = (
-  state = fakeData.rooms || [],
-  action
-) => {
+const roomsReducer: (state: Room[], action: Action) => Room[] = (state = [], action) => {
   switch (action.type) {
     case 'CREATE_ROOM':
       return [...state, action.room as Room];
@@ -55,7 +47,7 @@ const roomsReducer: (state: Room[], action: Action) => Room[] = (
 };
 
 const roomItemsReducer: (state: RoomItem[], action: Action) => RoomItem[] = (
-  state = fakeData.roomItems || [],
+  state = [],
   action
 ) => {
   let stateIndex = Number.MIN_SAFE_INTEGER;

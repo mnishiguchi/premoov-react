@@ -1,4 +1,3 @@
-// @ts-nocheck
 import faker from 'faker';
 
 const projectId = '1';

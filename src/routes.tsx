@@ -7,6 +7,7 @@ import HomePage from './pages/HomePage';
 import AboutPage from './pages/AboutPage';
 import ProjectPage from './pages/ProjectPage';
 import RoomsPage from './pages/RoomsPage';
+import SettingsPage from './pages/SettingsPage';
 
 const Routes: React.FC = () => {
   return (
@@ -15,6 +16,7 @@ const Routes: React.FC = () => {
       <AboutPage path="about" />
       <ProjectPage path="projects/:id" />
       <RoomsPage path="projects/:projectId/rooms" />
+      <SettingsPage path="settings" />
     </Router>
   );
 };

@@ -12,7 +12,8 @@ export type Action =
   | { type: 'UPDATE_ROOM_ITEM'; roomItem: RoomItem }
   | { type: 'DELETE_ROOM_ITEM'; roomItemId: string }
   | { type: 'INCREMENT_ROOM_ITEM_COUNT'; roomItemId: string }
-  | { type: 'DECREMENT_ROOM_ITEM_COUNT'; roomItemId: string };
+  | { type: 'DECREMENT_ROOM_ITEM_COUNT'; roomItemId: string }
+  | { type: 'SET_VOLUME_UNIT'; volumeUnit: string };
 
 export const createProjectAction: (project: Project) => Action = project => ({
   type: 'CREATE_PROJECT',
@@ -83,4 +84,9 @@ export const incrementRoomItemCountAction: (roomItemId: string) => Action = room
 export const decrementRoomItemCountAction: (roomItemId: string) => Action = roomItemId => ({
   type: 'DECREMENT_ROOM_ITEM_COUNT',
   roomItemId,
+});
+
+export const setVolumeUnitAction: (volumeUnit: string) => Action = volumeUnit => ({
+  type: 'SET_VOLUME_UNIT',
+  volumeUnit,
 });

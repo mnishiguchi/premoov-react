@@ -6,8 +6,11 @@ import MenuIcon from '@material-ui/icons/Menu';
 import ClearIcon from '@material-ui/icons/Clear';
 
 // Defines common UI for the app header. Accepts extra menu buttons as children.
-const AppHeader: React.FC = ({ children }) => {
+const AppHeader: React.FC<{
+  renderMenuItems?: (props: { closeMenu: () => void }) => void;
+}> = ({ renderMenuItems }) => {
   const [menuAnchorEl, setMenuAnchorEl] = useState<HTMLElement | null>(null);
+  const closeMenu = () => setMenuAnchorEl(null);
 
   return (
     <AppBar position="static">
@@ -30,16 +33,16 @@ const AppHeader: React.FC = ({ children }) => {
             anchorEl={menuAnchorEl}
             keepMounted
             open={Boolean(menuAnchorEl)}
-            onClose={() => {
-              setMenuAnchorEl(null);
-            }}
+            onClose={closeMenu}
           >
-            {children}
+            {/* Insert page specific menu items if any. */}
+            {renderMenuItems && renderMenuItems({ closeMenu })}
 
+            {/* Static menu items */}
             <MenuItem
               onClick={() => {
-                console.log(`TODO: Implement settings`);
-                setMenuAnchorEl(null);
+                navigate('/settings');
+                closeMenu();
               }}
             >
               <ListItemIcon>
@@ -50,7 +53,7 @@ const AppHeader: React.FC = ({ children }) => {
             <MenuItem
               onClick={() => {
                 window.localStorage.clear();
-                setMenuAnchorEl(null);
+                closeMenu();
               }}
             >
               <ListItemIcon>

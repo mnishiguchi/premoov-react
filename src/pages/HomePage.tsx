@@ -71,21 +71,34 @@ const HomePage: React.FC = () => {
 
   return (
     <>
-      <AppHeader>
-        <MenuItem onClick={openAddProjectModal}>
-          <ListItemIcon>
-            <AddIcon />
-          </ListItemIcon>
-          Add Project
-        </MenuItem>
-
-        <MenuItem onClick={handleFakeProjectCreated}>
-          <ListItemIcon>
-            <AddIcon />
-          </ListItemIcon>
-          Add Fake Project
-        </MenuItem>
-      </AppHeader>
+      <AppHeader
+        renderMenuItems={({ closeMenu }: { closeMenu: () => void }) => (
+          <>
+            <MenuItem
+              onClick={() => {
+                openAddProjectModal();
+                closeMenu();
+              }}
+            >
+              <ListItemIcon>
+                <AddIcon />
+              </ListItemIcon>
+              Add Project
+            </MenuItem>
+            <MenuItem
+              onClick={() => {
+                handleFakeProjectCreated();
+                closeMenu();
+              }}
+            >
+              <ListItemIcon>
+                <AddIcon />
+              </ListItemIcon>
+              Add Fake Project
+            </MenuItem>
+          </>
+        )}
+      />
 
       <PageContainer>
         <SEO />

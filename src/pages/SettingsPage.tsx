@@ -5,12 +5,11 @@ import SEO from '../components/SEO';
 import PageContainer from '../components/PageContainer';
 import AppHeader from '../components/AppHeader';
 
-const pageTitle = 'About';
+const pageTitle = 'Settings';
 
-const AboutPage: React.FC = () => (
+const SettingsPage: React.FC = () => (
   <>
     <AppHeader />
-
     <PageContainer>
       <SEO title={pageTitle} />
 
@@ -26,4 +25,4 @@ const AboutPage: React.FC = () => (
   </>
 );
 
-export default AboutPage;
+export default SettingsPage;

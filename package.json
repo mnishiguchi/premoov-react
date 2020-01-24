@@ -20,7 +20,7 @@
     "@types/react-redux": "^7.1.7",
     "@types/redux-logger": "^3.0.7",
     "@types/shortid": "^0.0.29",
-    "@types/yup": "^0.26.27",
+    "@types/yup": "^0.26.28",
     "faker": "^4.1.0",
     "formik": "^2.1.2",
     "react": "^16.12.0",

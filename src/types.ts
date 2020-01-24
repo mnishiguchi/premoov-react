@@ -21,11 +21,16 @@ export type RoomItem = {
   description: string;
 };
 
-export type DefaultVolumeLookup = any;
+export type DefaultVolumeLookup = {
+  [key: string]: Object;
+};
+
+export type VolumeUnit = 'm3' | 'ft3';
 
 export type AppState = {
   projects: Project[];
   rooms: Room[];
   roomItems: RoomItem[];
   defaultVolumeLookup: DefaultVolumeLookup;
+  volumeUnit: VolumeUnit;
 };

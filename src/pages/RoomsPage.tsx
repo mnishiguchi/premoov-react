@@ -45,7 +45,7 @@ const RoomsPage: React.FC<{
 
   return (
     <>
-      <AppHeader></AppHeader>
+      <AppHeader />
 
       <PageContainer>
         <SEO title={`Rooms | ${project!.name}`} />

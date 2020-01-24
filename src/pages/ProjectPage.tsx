@@ -161,22 +161,31 @@ const ProjectPage: React.FC<{
 
   return (
     <>
-      <AppHeader>
-        {rooms.length > 0 && (
-          <MenuItem component={Link} to={`/projects/${project!.id}/rooms`}>
-            <ListItemIcon>
-              <RoomIcon />
-            </ListItemIcon>
-            Rooms
-          </MenuItem>
+      <AppHeader
+        renderMenuItems={({ closeMenu }: { closeMenu: () => void }) => (
+          <>
+            {rooms.length > 0 && (
+              <MenuItem component={Link} to={`/projects/${project!.id}/rooms`}>
+                <ListItemIcon>
+                  <RoomIcon />
+                </ListItemIcon>
+                Rooms
+              </MenuItem>
+            )}
+            <MenuItem
+              onClick={() => {
+                openAddRoomModal();
+                closeMenu();
+              }}
+            >
+              <ListItemIcon>
+                <AddIcon />
+              </ListItemIcon>
+              Add room
+            </MenuItem>
+          </>
         )}
-        <MenuItem onClick={openAddRoomModal}>
-          <ListItemIcon>
-            <AddIcon />
-          </ListItemIcon>
-          Add room
-        </MenuItem>
-      </AppHeader>
+      />
 
       <PageContainer>
         <SEO title={pageTitle} />

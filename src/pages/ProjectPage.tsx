@@ -62,7 +62,10 @@ const ProjectPage: React.FC<{
   id: string;
 }> = ({ id }) => {
   // @ts-ignore
-  const { project, rooms, roomItems, defaultVolumeLookup } = useSelector(selectProjectById(id));
+  const { project, rooms, roomItems } = useSelector(selectProjectById(id));
+  // @ts-ignore
+  const { volumeUnit, defaultVolumeLookup } = useSelector(state => state);
+
   const defaultRoomItemNames = useSelector(selectDefaultRoomItemNames);
   const dispatch = useDispatch();
   const [currentRoomId, setCurrentRoomId] = React.useState(rooms[0] && rooms[0].id);
@@ -201,25 +204,36 @@ const ProjectPage: React.FC<{
           </Grid>
 
           <Grid item xs={12}>
-            <TableContainer component={Paper}>
-              <Table size="small">
-                <TableHead>
-                  <TableRow>
-                    <TableCell align="center">Total Item Count</TableCell>
-                    <TableCell align="center">Total Volume</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  <TableRow>
-                    <TableCell align="center">{sumRoomItemsCount(roomItems)}</TableCell>
-                    <TableCell align="center">{sumRoomItemsVolume(roomItems)}</TableCell>
-                  </TableRow>
-                </TableBody>
-              </Table>
-            </TableContainer>
+            <Typography variant="body2">
+              <strong>Item Count</strong>: {sumRoomItemsCount(roomItems)}
+            </Typography>
+            <Typography variant="body2">
+              <strong>Volume</strong>: {sumRoomItemsVolume(roomItems)} ({volumeUnit})
+            </Typography>
           </Grid>
 
           <Grid item xs={12}>
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+              <Typography variant="h5">Rooms</Typography>
+
+              <div>
+                {rooms.length > 0 && (
+                  <Button component={Link} to={`/projects/${project!.id}/rooms`}>
+                    <RoomIcon />
+                    Rooms
+                  </Button>
+                )}
+                <Button
+                  onClick={() => {
+                    openAddRoomModal();
+                  }}
+                >
+                  <AddIcon />
+                  Add room
+                </Button>
+              </div>
+            </div>
+
             {rooms.length > 0 && (
               <TableContainer component={Paper}>
                 <Table size="small">
@@ -227,7 +241,7 @@ const ProjectPage: React.FC<{
                     <TableRow>
                       <TableCell align="left">Room</TableCell>
                       <TableCell align="center">Item Count</TableCell>
-                      <TableCell align="center">Volume</TableCell>
+                      <TableCell align="center">Volume ({volumeUnit})</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -256,15 +270,17 @@ const ProjectPage: React.FC<{
           </Grid>
 
           <Grid item xs={12}>
-            {rooms.length > 0 && (
-              <Button color="primary" onClick={openAddRoomItemModal} style={{ float: 'right' }}>
-                <AddIcon /> Add item
-              </Button>
-            )}
-          </Grid>
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+              <Typography variant="h5">Items per Room</Typography>
 
-          {rooms.length > 0 && (
-            <Grid item xs={12}>
+              {rooms.length > 0 && (
+                <Button color="primary" onClick={openAddRoomItemModal}>
+                  <AddIcon /> Add item
+                </Button>
+              )}
+            </div>
+
+            {rooms.length > 0 && (
               <Paper square>
                 <Tabs
                   value={currentRoomId}
@@ -292,6 +308,7 @@ const ProjectPage: React.FC<{
                           rows={filteredRoomItems}
                           defaultRoomItemNames={defaultRoomItemNames}
                           defaultVolumeLookup={defaultVolumeLookup}
+                          volumeUnit={volumeUnit as string}
                           onRoomItemCountIncremented={handleRoomItemCountIncremented}
                           onRoomItemCountDecremented={handleRoomItemCountDecremented}
                           onRoomItemUpdated={handleRoomItemUpdated}
@@ -302,31 +319,28 @@ const ProjectPage: React.FC<{
                   );
                 })}
               </Paper>
-            </Grid>
-          )}
-
-          <Grid item xs={12}>
-            <ExpansionPanel>
-              <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-                <NoteIcon />
-              </ExpansionPanelSummary>
-              <ExpansionPanelDetails>
-                <TextField
-                  multiline
-                  name="description"
-                  onChange={(e: any) => handleProjectDescriptionUpdated(e.target.value as string)}
-                  value={project!.description}
-                  rows="10"
-                  fullWidth
-                />
-              </ExpansionPanelDetails>
-            </ExpansionPanel>
+            )}
           </Grid>
 
           <Grid item xs={12}>
+            <Typography variant="h5">Description</Typography>
+
+            <TextField
+              multiline
+              name="description"
+              onChange={(e: any) => handleProjectDescriptionUpdated(e.target.value as string)}
+              value={project!.description}
+              rows="10"
+              fullWidth
+            />
+          </Grid>
+
+          <Grid item xs={12}>
+            <Typography variant="h5">Danger Zone</Typography>
+
             <ExpansionPanel>
               <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-                <WarningIcon /> <Typography>Danger Zone</Typography>
+                <WarningIcon />
               </ExpansionPanelSummary>
               <ExpansionPanelDetails>
                 <Button

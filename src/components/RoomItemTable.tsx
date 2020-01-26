@@ -9,6 +9,7 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  Typography,
 } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import EditIcon from '@material-ui/icons/Edit';
@@ -23,6 +24,7 @@ const RoomItemTable: React.FC<{
   rows: RoomItem[];
   defaultRoomItemNames: string[];
   defaultVolumeLookup: any;
+  volumeUnit: string;
   onRoomItemCountIncremented: (roomItemId: string) => void;
   onRoomItemCountDecremented: (roomItemId: string) => void;
   onRoomItemUpdated: (roomItem: RoomItem) => void;
@@ -31,6 +33,7 @@ const RoomItemTable: React.FC<{
   rows,
   defaultRoomItemNames,
   defaultVolumeLookup,
+  volumeUnit,
   onRoomItemCountIncremented,
   onRoomItemCountDecremented,
   onRoomItemUpdated,
@@ -44,14 +47,20 @@ const RoomItemTable: React.FC<{
     <>
       <TableContainer component={Paper}>
         <Table>
-          {rows.length > 0 && (
+          {rows.length > 0 ? (
             <TableHead>
               <TableRow>
                 <TableCell align="left">Name</TableCell>
-                <TableCell align="right">Volume</TableCell>
+                <TableCell align="right">{volumeUnit} Each</TableCell>
                 <TableCell align="right">Count</TableCell>
-                <TableCell align="right">Total</TableCell>
+                <TableCell align="right">{volumeUnit} Total</TableCell>
                 <TableCell align="right"></TableCell>
+              </TableRow>
+            </TableHead>
+          ) : (
+            <TableHead>
+              <TableRow>
+                <TableCell align="left">No items</TableCell>
               </TableRow>
             </TableHead>
           )}

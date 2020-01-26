@@ -41,7 +41,7 @@ const HomePage: React.FC = () => {
   const dispatch = useDispatch();
 
   // @ts-ignore
-  const { projects, rooms, roomItems } = useSelector(state => state);
+  const { projects, rooms, roomItems, volumeUnit } = useSelector(state => state);
 
   const {
     open: openAddProjectModal,
@@ -115,13 +115,16 @@ const HomePage: React.FC = () => {
                 </Typography>
                 <Typography variant="body2">{project.description}</Typography>
                 <Typography variant="body2">
-                  <strong>Room Count</strong>: {filteredRooms.length}
+                  <strong>Rooms</strong>:{' '}
+                  {filteredRooms.length > 0
+                    ? filteredRooms.map(room => room.name).join(', ')
+                    : 'none'}
                 </Typography>
                 <Typography variant="body2">
                   <strong>Item Count</strong>: {sumRoomItemsCount(filteredRoomItems)}
                 </Typography>
                 <Typography variant="body2">
-                  <strong>Volume</strong>: {sumRoomItemsVolume(filteredRoomItems)}
+                  <strong>Volume</strong>: {sumRoomItemsVolume(filteredRoomItems)} ({volumeUnit})
                 </Typography>
               </CardContent>
               <CardActions>

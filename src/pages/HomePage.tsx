@@ -73,7 +73,8 @@ const HomePage: React.FC = () => {
     <>
       <AppHeader
         renderMenuItems={({ closeMenu }: { closeMenu: () => void }) => (
-          <>
+          // Material-UI: the Menu component doesn't accept a Fragment as a child.
+          <div>
             <MenuItem
               onClick={() => {
                 openAddProjectModal();
@@ -96,7 +97,7 @@ const HomePage: React.FC = () => {
               </ListItemIcon>
               Add Fake Project
             </MenuItem>
-          </>
+          </div>
         )}
       />
 

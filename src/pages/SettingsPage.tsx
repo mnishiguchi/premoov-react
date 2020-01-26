@@ -1,28 +1,51 @@
 import React from 'react';
-import { Typography } from '@material-ui/core';
+import { FormControlLabel, Radio, RadioGroup, Typography } from '@material-ui/core';
+import { useSelector, useDispatch } from 'react-redux';
 
 import SEO from '../components/SEO';
 import PageContainer from '../components/PageContainer';
 import AppHeader from '../components/AppHeader';
+import { setVolumeUnitAction } from '../redux/actions';
 
 const pageTitle = 'Settings';
 
-const SettingsPage: React.FC = () => (
-  <>
-    <AppHeader />
-    <PageContainer>
-      <SEO title={pageTitle} />
+const SettingsPage: React.FC = () => {
+  // @ts-ignore
+  const currentVolumeUnit = useSelector(state => state.volumeUnit);
+  const dispatch = useDispatch();
 
-      <Typography variant="h4" gutterBottom>
-        {pageTitle}
-      </Typography>
-      <Typography variant="body1">
-        Lorem ipsum dolor sit amet consectetur, adipisicing elit. Fugit hic, officiis ab rem aliquid
-        minus maiores doloremque consequuntur omnis, consequatur explicabo debitis veniam possimus
-        culpa voluptates sint. Beatae, dolores perspiciatis?
-      </Typography>
-    </PageContainer>
-  </>
-);
+  return (
+    <>
+      <AppHeader />
+      <PageContainer>
+        <SEO title={pageTitle} />
+
+        <Typography variant="h4" gutterBottom>
+          {pageTitle}
+        </Typography>
+
+        <RadioGroup
+          name="volumeUnit"
+          value={currentVolumeUnit}
+          onChange={e => dispatch(setVolumeUnitAction(e.target.value))}
+          row
+        >
+          <FormControlLabel
+            value="m3"
+            control={<Radio color="primary" />}
+            label="M3"
+            labelPlacement="top"
+          />
+          <FormControlLabel
+            value="ft3"
+            control={<Radio color="primary" />}
+            label="FT3"
+            labelPlacement="top"
+          />
+        </RadioGroup>
+      </PageContainer>
+    </>
+  );
+};
 
 export default SettingsPage;

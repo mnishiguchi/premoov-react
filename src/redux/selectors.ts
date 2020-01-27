@@ -1,7 +1,7 @@
 import { AppState, Project, Room, RoomItem, VolumeUnit } from '../types';
 import { displayVolumeValue } from '../lib';
 
-type SelectProjectByIdType = (
+export const selectProjectById: (
   productId: string
 ) => (
   state: AppState
@@ -9,20 +9,11 @@ type SelectProjectByIdType = (
   project?: Project;
   rooms: Room[];
   roomItems: RoomItem[];
-  defaultVolumeLookup: any;
-};
-
-export const selectProjectById: SelectProjectByIdType = (productId: string) => (
-  state: AppState
-) => ({
+} = (productId: string) => (state: AppState) => ({
   project: state.projects.find((project: Project) => project.id === productId),
   rooms: state.rooms.filter((room: Room) => room.projectId === productId),
   roomItems: state.roomItems.filter((roomItem: RoomItem) => roomItem.projectId === productId),
-  defaultVolumeLookup: state.defaultVolumeLookup,
 });
-
-export const selectDefaultRoomItemNames: (state: AppState) => string[] = state =>
-  Object.keys(state.defaultVolumeLookup);
 
 export const createFilterRoomsByProjectId = (rooms: Room[]) => (projectId: string) =>
   rooms.filter((room: Room) => room.projectId === projectId);

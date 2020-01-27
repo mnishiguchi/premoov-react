@@ -1,7 +1,6 @@
 import { combineReducers, Reducer } from 'redux';
 
-import { Project, Room, RoomItem, DefaultVolumeLookup, VolumeUnit } from '../types';
-import defaultVolumeLookup from '../data/roomItems.json';
+import { Project, Room, RoomItem, VolumeUnit } from '../types';
 import { Action } from './actions';
 
 const projectsReducer: (state: Project[], action: Action) => Project[] = (state = [], action) => {
@@ -106,21 +105,10 @@ const valumeUnitReducer: (state: VolumeUnit, action: Action) => VolumeUnit = (
   }
 };
 
-const defaultVolumeLookupReducer: (state: DefaultVolumeLookup, action: Action) => any = (
-  state = defaultVolumeLookup,
-  action
-) => {
-  switch (action.type) {
-    default:
-      return state;
-  }
-};
-
 const rootReducer = combineReducers({
   projects: projectsReducer as Reducer<Project[]>,
   rooms: roomsReducer as Reducer<Room[]>,
   roomItems: roomItemsReducer as Reducer<RoomItem[]>,
-  defaultVolumeLookup: defaultVolumeLookupReducer as Reducer<DefaultVolumeLookup>,
   volumeUnit: valumeUnitReducer as Reducer<string>,
 });
 

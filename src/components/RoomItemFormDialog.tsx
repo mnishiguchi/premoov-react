@@ -15,8 +15,9 @@ import {
 import { toast } from 'react-toastify';
 
 import FormFieldSpacer from './FormFieldSpacer';
-import { DefaultVolumeLookup, VolumeUnit } from '../types';
+import { VolumeUnit } from '../types';
 import { displayVolumeValue, VOLUME_UNIT_M3, VOLUME_UNIT_FT3 } from '../lib';
+import defaultVolumeLookup from '../data/roomItems.json';
 
 const volumeSliderConfig = (volumeUnit: VolumeUnit) => {
   switch (volumeUnit) {
@@ -44,7 +45,6 @@ const RoomItemFormDialog: React.FC<{
   onSubmit: (e: any, others: {}) => void;
   initialValues?: any;
   defaultRoomItemNames: string[];
-  defaultVolumeLookup: DefaultVolumeLookup;
   volumeUnit: VolumeUnit;
 }> = ({
   onSubmit,
@@ -53,7 +53,6 @@ const RoomItemFormDialog: React.FC<{
   onClose,
   initialValues = {},
   defaultRoomItemNames = [],
-  defaultVolumeLookup = {},
   volumeUnit,
 }) => {
   const {
@@ -106,7 +105,7 @@ const RoomItemFormDialog: React.FC<{
                 `Volume Suggestion: ${displayVolumeValue(
                   defaultVolumeLookup[e.target.value]['m3'],
                   volumeUnit
-                )} ${volumeUnit}`
+                )} (${volumeUnit})`
               );
           }}
           value={values.name}

@@ -31,6 +31,5 @@ export type AppState = {
   projects: Project[];
   rooms: Room[];
   roomItems: RoomItem[];
-  defaultVolumeLookup: DefaultVolumeLookup;
   volumeUnit: VolumeUnit;
 };

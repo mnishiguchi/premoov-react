@@ -33,12 +33,7 @@ import RoomItemTable from '../components/RoomItemTable';
 import RoomFormDialog from '../components/RoomFormDialog';
 import RoomItemFormDialog from '../components/RoomItemFormDialog';
 import useToggle from '../components/useToggle';
-import {
-  selectProjectById,
-  selectDefaultRoomItemNames,
-  sumRoomItemsCount,
-  sumRoomItemsVolume,
-} from '../redux/selectors';
+import { selectProjectById, sumRoomItemsCount, sumRoomItemsVolume } from '../redux/selectors';
 import { Project, Room, RoomItem } from '../types';
 import SEO from '../components/SEO';
 import PageContainer from '../components/PageContainer';
@@ -54,6 +49,7 @@ import {
   decrementRoomItemCountAction,
 } from '../redux/actions';
 import { convertFt3ToM3, VOLUME_UNIT_FT3 } from '../lib';
+import defaultVolumeLookup from '../data/roomItems.json';
 
 const ProjectPage: React.FC<{
   id: string;
@@ -61,9 +57,9 @@ const ProjectPage: React.FC<{
   // @ts-ignore
   const { project, rooms, roomItems } = useSelector(selectProjectById(id));
   // @ts-ignore
-  const { volumeUnit, defaultVolumeLookup } = useSelector(state => state);
+  const { volumeUnit } = useSelector(state => state);
 
-  const defaultRoomItemNames = useSelector(selectDefaultRoomItemNames);
+  const defaultRoomItemNames = Object.keys(defaultVolumeLookup);
   const dispatch = useDispatch();
   const [currentRoomId, setCurrentRoomId] = React.useState(rooms[0] && rooms[0].id);
   const {
@@ -283,7 +279,6 @@ const ProjectPage: React.FC<{
                         <RoomItemTable
                           rows={filteredRoomItems}
                           defaultRoomItemNames={defaultRoomItemNames}
-                          defaultVolumeLookup={defaultVolumeLookup}
                           volumeUnit={volumeUnit}
                           onRoomItemCountIncremented={handleRoomItemCountIncremented}
                           onRoomItemCountDecremented={handleRoomItemCountDecremented}
@@ -368,7 +363,6 @@ const ProjectPage: React.FC<{
               }}
               title={`Add Item to "${currentRoom!.name}"`}
               defaultRoomItemNames={defaultRoomItemNames}
-              defaultVolumeLookup={defaultVolumeLookup}
               volumeUnit={volumeUnit}
             />
           )}

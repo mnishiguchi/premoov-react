@@ -23,7 +23,6 @@ import { displayVolumeValue, convertFt3ToM3, VOLUME_UNIT_FT3 } from '../lib';
 const RoomItemTable: React.FC<{
   rows: RoomItem[];
   defaultRoomItemNames: string[];
-  defaultVolumeLookup: any;
   volumeUnit: VolumeUnit;
   onRoomItemCountIncremented: (roomItemId: string) => void;
   onRoomItemCountDecremented: (roomItemId: string) => void;
@@ -32,7 +31,6 @@ const RoomItemTable: React.FC<{
 }> = ({
   rows,
   defaultRoomItemNames,
-  defaultVolumeLookup,
   volumeUnit,
   onRoomItemCountIncremented,
   onRoomItemCountDecremented,
@@ -116,7 +114,6 @@ const RoomItemTable: React.FC<{
                       }}
                       title={`Edit ${row.name}`}
                       defaultRoomItemNames={defaultRoomItemNames}
-                      defaultVolumeLookup={defaultVolumeLookup}
                       volumeUnit={volumeUnit}
                     />
                   </div>

@@ -1,7 +1,7 @@
 import { combineReducers, Reducer } from 'redux';
 
 import { Project, Room, RoomItem, DefaultVolumeLookup, VolumeUnit } from '../types';
-import defaultVolumeLookup from '../data/api.json';
+import defaultVolumeLookup from '../data/roomItems.json';
 import { Action } from './actions';
 
 const projectsReducer: (state: Project[], action: Action) => Project[] = (state = [], action) => {

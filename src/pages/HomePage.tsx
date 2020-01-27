@@ -4,6 +4,7 @@ import {
   Card,
   CardActions,
   CardContent,
+  Grid,
   MenuItem,
   ListItemIcon,
   Typography,
@@ -78,17 +79,6 @@ const HomePage: React.FC = () => {
           <div>
             <MenuItem
               onClick={() => {
-                openAddProjectModal();
-                closeMenu();
-              }}
-            >
-              <ListItemIcon>
-                <AddIcon />
-              </ListItemIcon>
-              Add Project
-            </MenuItem>
-            <MenuItem
-              onClick={() => {
                 handleFakeProjectCreated();
                 closeMenu();
               }}
@@ -105,9 +95,22 @@ const HomePage: React.FC = () => {
       <PageContainer>
         <SEO />
 
-        <Typography variant="h1" gutterBottom>
-          All Projects
-        </Typography>
+        <Grid item xs={12}>
+          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <Typography variant="h1" gutterBottom>
+              All Projects
+            </Typography>
+
+            <Button
+              onClick={() => {
+                openAddProjectModal();
+              }}
+            >
+              <AddIcon />
+              Add Project
+            </Button>
+          </div>
+        </Grid>
 
         {projects.length < 1 && <Typography variant="body1">No project</Typography>}
 

@@ -61,7 +61,7 @@ const AppHeader: React.FC<{
               <ListItemIcon>
                 <ClearIcon />
               </ListItemIcon>
-              Clear Local Storage
+              Clear Data
             </MenuItem>
           </Menu>
         </span>

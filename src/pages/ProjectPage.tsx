@@ -6,8 +6,6 @@ import {
   ExpansionPanelSummary,
   Grid,
   IconButton,
-  ListItemIcon,
-  MenuItem,
   Paper,
   Tab,
   Table,
@@ -23,7 +21,6 @@ import {
 import AddIcon from '@material-ui/icons/Add';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
-import RoomIcon from '@material-ui/icons/Room';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import WarningIcon from '@material-ui/icons/Warning';
 import { Link, navigate } from '@reach/router';
@@ -169,31 +166,7 @@ const ProjectPage: React.FC<{
 
   return (
     <>
-      <AppHeader
-        renderMenuItems={({ closeMenu }: { closeMenu: () => void }) => (
-          <div>
-            {rooms.length > 0 && (
-              <MenuItem component={Link} to={`/projects/${project!.id}/rooms`}>
-                <ListItemIcon>
-                  <RoomIcon />
-                </ListItemIcon>
-                Rooms
-              </MenuItem>
-            )}
-            <MenuItem
-              onClick={() => {
-                openAddRoomModal();
-                closeMenu();
-              }}
-            >
-              <ListItemIcon>
-                <AddIcon />
-              </ListItemIcon>
-              Add room
-            </MenuItem>
-          </div>
-        )}
-      />
+      <AppHeader />
 
       <PageContainer>
         <SEO title={pageTitle} />
@@ -222,8 +195,7 @@ const ProjectPage: React.FC<{
               <div>
                 {rooms.length > 0 && (
                   <Button component={Link} to={`/projects/${project!.id}/rooms`}>
-                    <RoomIcon />
-                    Rooms
+                    Details
                   </Button>
                 )}
                 <Button
@@ -280,7 +252,7 @@ const ProjectPage: React.FC<{
                 <Typography variant="h4">Items per Room</Typography>
 
                 {rooms.length > 0 && (
-                  <Button color="primary" onClick={openAddRoomItemModal}>
+                  <Button onClick={openAddRoomItemModal}>
                     <AddIcon /> Add item
                   </Button>
                 )}

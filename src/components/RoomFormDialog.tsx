@@ -12,6 +12,7 @@ import {
 } from '@material-ui/core';
 
 import FormFieldSpacer from './FormFieldSpacer';
+import { rooms as defaultRoomNames } from '../data/rooms';
 
 const RoomFormDialog: React.FC<{
   title?: string;
@@ -59,8 +60,17 @@ const RoomFormDialog: React.FC<{
             shrink: true,
           }}
           required
+          inputProps={{
+            list: 'RoomFormDialog-defaultRoomNames',
+          }}
         />
+        <datalist id="RoomFormDialog-defaultRoomNames">
+          {defaultRoomNames.map(defaultRoomName => (
+            <option key={defaultRoomName} value={defaultRoomName} />
+          ))}
+        </datalist>
         <FormFieldSpacer />
+
         <TextField
           multiline
           name="description"

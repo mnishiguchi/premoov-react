@@ -60,7 +60,7 @@ const RoomItemTable: React.FC<{
           ) : (
             <TableHead>
               <TableRow>
-                <TableCell align="left">No items</TableCell>
+                <TableCell align="left">No item in this room</TableCell>
               </TableRow>
             </TableHead>
           )}

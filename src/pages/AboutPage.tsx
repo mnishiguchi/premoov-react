@@ -19,9 +19,8 @@ const AboutPage: React.FC = () => (
       </Typography>
 
       <Typography variant="body1">
-        Lorem ipsum dolor sit amet consectetur, adipisicing elit. Fugit hic, officiis ab rem aliquid
-        minus maiores doloremque consequuntur omnis, consequatur explicabo debitis veniam possimus
-        culpa voluptates sint. Beatae, dolores perspiciatis?
+        Premoov is a calculator for the volume of household items. It is useful before moving. The
+        data will be stored in your device so that you can calculate the volume little by little.
       </Typography>
     </PageContainer>
   </>

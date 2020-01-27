@@ -25,6 +25,7 @@ const ProjectFormDialog: React.FC<{
     initialValues: {
       name: '',
       description: '',
+      address: '',
       ...initialValues,
     },
     validationSchema: Yup.object().shape({
@@ -33,8 +34,13 @@ const ProjectFormDialog: React.FC<{
         .max(50, 'Too Long')
         .required('Required'),
       description: Yup.string()
-        .min(2, 'Too Short')
         .max(2000, 'Too Long'),
+      addressFrom: Yup.string()
+        .min(2, 'Too Short')
+        .max(300, 'Too Long'),
+      addressTo: Yup.string()
+        .min(2, 'Too Short')
+        .max(300, 'Too Long'),
     }),
   });
 
@@ -61,6 +67,7 @@ const ProjectFormDialog: React.FC<{
           required
         />
         <FormFieldSpacer />
+
         <TextField
           multiline
           name="description"
@@ -70,6 +77,34 @@ const ProjectFormDialog: React.FC<{
           rows="10"
           error={errors.description && touched.description}
           helperText={errors.description}
+          fullWidth
+          InputLabelProps={{
+            shrink: true,
+          }}
+        />
+        <FormFieldSpacer />
+
+        <TextField
+          multiline
+          name="addressFrom"
+          label="Address From"
+          onChange={handleChange}
+          value={values.addressFrom}
+          rows="3"
+          fullWidth
+          InputLabelProps={{
+            shrink: true,
+          }}
+        />
+        <FormFieldSpacer />
+
+        <TextField
+          multiline
+          name="addressTo"
+          label="Address To"
+          onChange={handleChange}
+          value={values.addressTo}
+          rows="3"
           fullWidth
           InputLabelProps={{
             shrink: true,

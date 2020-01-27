@@ -18,12 +18,18 @@ import shortid from 'shortid';
 import ProjectFormDialog from '../components/ProjectFormDialog';
 import SEO from '../components/SEO';
 import { Project } from '../types';
+import { gmapPlaceLink, gmapDirectionLink } from '../lib';
 import PageContainer from '../components/PageContainer';
 import AppHeader from '../components/AppHeader';
 import useToggle from '../components/useToggle';
+import OutboundLink from '../components/OutboundLink';
 import { createProjectAction, createRoomAction } from '../redux/actions';
-import { createFilterRoomsByProjectId, createFilterRoomItemsByProjectId } from '../redux/selectors';
-import { sumRoomItemsCount, sumRoomItemsVolume } from '../redux/selectors';
+import {
+  createFilterRoomsByProjectId,
+  createFilterRoomItemsByProjectId,
+  sumRoomItemsCount,
+  sumRoomItemsVolume,
+} from '../redux/selectors';
 
 const generateFakeProject = () => ({
   id: shortid.generate(),
@@ -123,20 +129,39 @@ const HomePage: React.FC = () => {
                 <Typography variant="h2" gutterBottom>
                   {project.name}
                 </Typography>
+
                 <Typography variant="body2">{project.description}</Typography>
+
                 <Typography variant="body2">
                   <strong>Rooms</strong>:{' '}
                   {filteredRooms.length > 0
                     ? filteredRooms.map(room => room.name).join(', ')
                     : 'none'}
                 </Typography>
-                <Typography variant="body2">
-                  <strong>Item Count</strong>: {sumRoomItemsCount(filteredRoomItems)}
-                </Typography>
+
                 <Typography variant="body2">
                   <strong>Volume</strong>: {sumRoomItemsVolume(filteredRoomItems, volumeUnit)} (
                   {volumeUnit})
                 </Typography>
+
+                {project!.addressFrom && (
+                  <Typography variant="body2">
+                    <strong>From</strong>:
+                    <OutboundLink href={gmapPlaceLink(project.addressFrom)}>{project.addressFrom}</OutboundLink>
+                  </Typography>
+                )}
+                {project!.addressTo && (
+                  <Typography variant="body2">
+                    <strong>To</strong>:
+                    <OutboundLink href={gmapPlaceLink(project.addressTo)}>{project.addressTo}</OutboundLink>
+                  </Typography>
+                )}
+
+                {project!.addressFrom && project!.addressTo && (
+                  <Typography variant="body2">
+                    <OutboundLink href={gmapDirectionLink(project.addressFrom, project.addressTo)}>Directions</OutboundLink>
+                  </Typography>
+                )}
               </CardContent>
               <CardActions>
                 <Button

@@ -2,6 +2,8 @@ export type Project = {
   id: string;
   name: string;
   description: string;
+  addressFrom?: string;
+  addressTo?: string;
 };
 
 export type Room = {

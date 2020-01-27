@@ -18,10 +18,11 @@ const SettingsPage: React.FC = () => {
   return (
     <>
       <AppHeader />
+
       <PageContainer>
         <SEO title={pageTitle} />
 
-        <Typography variant="h4" gutterBottom>
+        <Typography variant="h1" gutterBottom>
           {pageTitle}
         </Typography>
 

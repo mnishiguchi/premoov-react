@@ -52,8 +52,10 @@ const AppHeader: React.FC<{
             </MenuItem>
             <MenuItem
               onClick={() => {
-                window.localStorage.clear();
-                closeMenu();
+                if (window.confirm(`Deleting all data. OK?`)) {
+                  window.localStorage.clear();
+                  window.location.reload();
+                }
               }}
             >
               <ListItemIcon>

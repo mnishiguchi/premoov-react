@@ -26,13 +26,14 @@ import { sumRoomItemsCount, sumRoomItemsVolume } from '../redux/selectors';
 
 const generateFakeProject = () => ({
   id: shortid.generate(),
-  name: faker.hacker.phrase(),
+  name: faker.address.country(),
   description: faker.lorem.paragraphs(2),
 });
 
 const generateFakeRoom = (projectId?: string) => ({
   id: shortid.generate(),
-  name: faker.hacker.phrase(),
+  // TODO: Take one from room name suggestion
+  name: faker.commerce.color(),
   description: faker.lorem.paragraphs(2),
   projectId: shortid.generate(),
 });
@@ -104,13 +105,19 @@ const HomePage: React.FC = () => {
       <PageContainer>
         <SEO />
 
+        <Typography variant="h1" gutterBottom>
+          All Projects
+        </Typography>
+
+        {projects.length < 1 && <Typography variant="body1">No project</Typography>}
+
         {projects.map((project: Project) => {
           const filteredRooms = filterRoomsByProjectId(project.id);
           const filteredRoomItems = filterRoomItemsByProjectId(project.id);
           return (
             <Card key={project.id} style={{ marginBottom: '1rem' }}>
               <CardContent>
-                <Typography variant="h5" gutterBottom>
+                <Typography variant="h2" gutterBottom>
                   {project.name}
                 </Typography>
                 <Typography variant="body2">{project.description}</Typography>

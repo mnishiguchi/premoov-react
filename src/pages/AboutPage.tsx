@@ -14,9 +14,10 @@ const AboutPage: React.FC = () => (
     <PageContainer>
       <SEO title={pageTitle} />
 
-      <Typography variant="h4" gutterBottom>
+      <Typography variant="h1" gutterBottom>
         {pageTitle}
       </Typography>
+
       <Typography variant="body1">
         Lorem ipsum dolor sit amet consectetur, adipisicing elit. Fugit hic, officiis ab rem aliquid
         minus maiores doloremque consequuntur omnis, consequatur explicabo debitis veniam possimus

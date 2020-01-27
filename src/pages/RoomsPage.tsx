@@ -52,7 +52,7 @@ const RoomsPage: React.FC<{
 
         <Grid container spacing={3}>
           <Grid item xs={12}>
-            <Typography variant="h4" gutterBottom>
+            <Typography variant="h1" gutterBottom>
               Rooms of <Link to={`/projects/${project!.id}`}>{project!.name}</Link>
             </Typography>
           </Grid>

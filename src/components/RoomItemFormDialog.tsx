@@ -16,7 +16,26 @@ import { toast } from 'react-toastify';
 
 import FormFieldSpacer from './FormFieldSpacer';
 import { DefaultVolumeLookup, VolumeUnit } from '../types';
-import { displayVolumeValue } from '../lib';
+import { displayVolumeValue, VOLUME_UNIT_M3, VOLUME_UNIT_FT3 } from '../lib';
+
+const volumeSliderConfig = (volumeUnit: VolumeUnit) => {
+  switch (volumeUnit) {
+    case VOLUME_UNIT_M3:
+      return {
+        step: 0.05,
+        min: 0,
+        max: 1.5,
+      };
+    case VOLUME_UNIT_FT3:
+      return {
+        step: 1,
+        min: 0,
+        max: 50,
+      };
+    default:
+      throw new Error(`Invalid volume unit ${volumeUnit}`);
+  }
+};
 
 const RoomItemFormDialog: React.FC<{
   title?: string;
@@ -110,13 +129,10 @@ const RoomItemFormDialog: React.FC<{
         <Slider
           name="volume"
           value={values.volume}
-          step={1}
           marks
-          min={0}
-          max={50}
           valueLabelDisplay="auto"
-          getAriaValueText={(v: number) => JSON.stringify(v)}
           onChangeCommitted={(e: any, v: number) => setFieldValue('volume', v)}
+          {...volumeSliderConfig(volumeUnit)}
         />
         <TextField
           type="number"

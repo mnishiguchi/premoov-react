@@ -163,6 +163,10 @@ const ProjectPage: React.FC<{
   const currentRoom = rooms.find(r => r.id === currentRoomId);
   const isVolumeUnitFt3 = volumeUnit === VOLUME_UNIT_FT3;
 
+  // This is a workaround for assigning the first room id to the local state
+  // when the first room is created in redux.
+  currentRoomId || (rooms[0] && setCurrentRoomId(rooms[0].id));
+
   return (
     <>
       <AppHeader
@@ -196,15 +200,13 @@ const ProjectPage: React.FC<{
 
         <Grid container spacing={3}>
           <Grid item xs={12}>
-            <Typography variant="h4" gutterBottom>
+            <Typography variant="h1">
               {pageTitle}
               <IconButton color="primary">
                 <EditIcon onClick={openEditProjectModal} />
               </IconButton>
             </Typography>
-          </Grid>
 
-          <Grid item xs={12}>
             <Typography variant="body2">
               <strong>Item Count</strong>: {sumRoomItemsCount(roomItems)}
             </Typography>
@@ -215,7 +217,7 @@ const ProjectPage: React.FC<{
 
           <Grid item xs={12}>
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-              <Typography variant="h5">Rooms</Typography>
+              <Typography variant="h4">Rooms</Typography>
 
               <div>
                 {rooms.length > 0 && (
@@ -234,6 +236,8 @@ const ProjectPage: React.FC<{
                 </Button>
               </div>
             </div>
+
+            {rooms.length === 0 && <Typography variant="body2">No room</Typography>}
 
             {rooms.length > 0 && (
               <TableContainer component={Paper}>
@@ -270,18 +274,17 @@ const ProjectPage: React.FC<{
             )}
           </Grid>
 
-          <Grid item xs={12}>
-            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-              <Typography variant="h5">Items per Room</Typography>
+          {rooms.length > 0 && (
+            <Grid item xs={12}>
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <Typography variant="h4">Items per Room</Typography>
 
-              {rooms.length > 0 && (
-                <Button color="primary" onClick={openAddRoomItemModal}>
-                  <AddIcon /> Add item
-                </Button>
-              )}
-            </div>
-
-            {rooms.length > 0 && (
+                {rooms.length > 0 && (
+                  <Button color="primary" onClick={openAddRoomItemModal}>
+                    <AddIcon /> Add item
+                  </Button>
+                )}
+              </div>
               <Paper square>
                 <Tabs
                   value={currentRoomId}
@@ -320,11 +323,11 @@ const ProjectPage: React.FC<{
                   );
                 })}
               </Paper>
-            )}
-          </Grid>
+            </Grid>
+          )}
 
           <Grid item xs={12}>
-            <Typography variant="h5">Description</Typography>
+            <Typography variant="h4">Description</Typography>
 
             <TextField
               multiline
@@ -337,11 +340,12 @@ const ProjectPage: React.FC<{
           </Grid>
 
           <Grid item xs={12}>
-            <Typography variant="h5">Danger Zone</Typography>
-
             <ExpansionPanel>
               <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
                 <WarningIcon />
+                <Typography variant="h4" style={{ marginLeft: '0.5rem' }}>
+                  Danger Zone
+                </Typography>
               </ExpansionPanelSummary>
               <ExpansionPanelDetails>
                 <Button

@@ -15,6 +15,8 @@ import {
 import { toast } from 'react-toastify';
 
 import FormFieldSpacer from './FormFieldSpacer';
+import { DefaultVolumeLookup, VolumeUnit } from '../types';
+import { displayVolumeValue } from '../lib';
 
 const RoomItemFormDialog: React.FC<{
   title?: string;
@@ -23,7 +25,8 @@ const RoomItemFormDialog: React.FC<{
   onSubmit: (e: any, others: {}) => void;
   initialValues?: any;
   defaultRoomItemNames: string[];
-  defaultVolumeLookup: any;
+  defaultVolumeLookup: DefaultVolumeLookup;
+  volumeUnit: VolumeUnit;
 }> = ({
   onSubmit,
   title,
@@ -32,6 +35,7 @@ const RoomItemFormDialog: React.FC<{
   initialValues = {},
   defaultRoomItemNames = [],
   defaultVolumeLookup = {},
+  volumeUnit,
 }) => {
   const {
     values,
@@ -46,9 +50,10 @@ const RoomItemFormDialog: React.FC<{
     initialValues: {
       name: '',
       description: '',
-      volume: 0,
       count: 0,
       ...initialValues,
+      // Use value in current unit.
+      volume: displayVolumeValue(initialValues.volume || 0, volumeUnit),
     },
     validationSchema: Yup.object().shape({
       name: Yup.string()
@@ -77,8 +82,13 @@ const RoomItemFormDialog: React.FC<{
           name="name"
           onChange={(e: any) => {
             handleChange(e);
-            // TODO: Make it human-readable
-            toast.info(JSON.stringify(defaultVolumeLookup[e.target.value]));
+            defaultVolumeLookup[e.target.value] &&
+              toast.info(
+                `Volume Suggestion: ${displayVolumeValue(
+                  defaultVolumeLookup[e.target.value]['m3'],
+                  volumeUnit
+                )} ${volumeUnit}`
+              );
           }}
           value={values.name}
           error={errors.name && touched.name}
@@ -96,7 +106,7 @@ const RoomItemFormDialog: React.FC<{
         </datalist>
         <FormFieldSpacer />
 
-        <FormLabel>Volume</FormLabel>
+        <FormLabel>{volumeUnit || 'Volume'}</FormLabel>
         <Slider
           name="volume"
           value={values.volume}

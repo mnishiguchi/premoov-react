@@ -6,6 +6,7 @@ import SEO from '../components/SEO';
 import PageContainer from '../components/PageContainer';
 import AppHeader from '../components/AppHeader';
 import { setVolumeUnitAction } from '../redux/actions';
+import { VOLUME_UNIT_FT3 } from '../lib';
 
 const pageTitle = 'Settings';
 
@@ -37,7 +38,7 @@ const SettingsPage: React.FC = () => {
             labelPlacement="top"
           />
           <FormControlLabel
-            value="ft3"
+            value={VOLUME_UNIT_FT3}
             control={<Radio color="primary" />}
             label="FT3"
             labelPlacement="top"

@@ -9,7 +9,6 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  Typography,
 } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import EditIcon from '@material-ui/icons/Edit';
@@ -18,13 +17,14 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import shortid from 'shortid';
 
 import RoomItemFormDialog from '../components/RoomItemFormDialog';
-import { RoomItem } from '../types';
+import { RoomItem, VolumeUnit } from '../types';
+import { displayVolumeValue, convertFt3ToM3, VOLUME_UNIT_FT3 } from '../lib';
 
 const RoomItemTable: React.FC<{
   rows: RoomItem[];
   defaultRoomItemNames: string[];
   defaultVolumeLookup: any;
-  volumeUnit: string;
+  volumeUnit: VolumeUnit;
   onRoomItemCountIncremented: (roomItemId: string) => void;
   onRoomItemCountDecremented: (roomItemId: string) => void;
   onRoomItemUpdated: (roomItem: RoomItem) => void;
@@ -42,6 +42,8 @@ const RoomItemTable: React.FC<{
   const [modalId, setModalId] = React.useState('');
   const openModal = setModalId;
   const closeModal = () => setModalId('');
+
+  const isVolumeUnitFt3 = volumeUnit === VOLUME_UNIT_FT3;
 
   return (
     <>
@@ -68,9 +70,11 @@ const RoomItemTable: React.FC<{
             {rows.map(row => (
               <TableRow key={row.name}>
                 <TableCell align="left">{row.name}</TableCell>
-                <TableCell align="right">{row.volume}</TableCell>
+                <TableCell align="right">{displayVolumeValue(row.volume, volumeUnit)}</TableCell>
                 <TableCell align="right">{row.count}</TableCell>
-                <TableCell align="right">{row.volume * row.count}</TableCell>
+                <TableCell align="right">
+                  {displayVolumeValue(row.volume * row.count, volumeUnit)}
+                </TableCell>
                 <TableCell align="right">
                   <ButtonGroup variant="text">
                     <IconButton onClick={() => onRoomItemCountDecremented(row.id)}>
@@ -93,20 +97,27 @@ const RoomItemTable: React.FC<{
                     </IconButton>
                   </ButtonGroup>
 
-                  <div className="pm-Modals">
+                  <div className="Premoov-modals">
                     <RoomItemFormDialog
                       key={shortid.generate()}
                       initialValues={row}
                       isOpen={modalId === row.name}
                       onClose={closeModal}
                       onSubmit={(roomItem: RoomItem, { resetForm }: any) => {
-                        onRoomItemUpdated(roomItem);
+                        onRoomItemUpdated({
+                          ...roomItem,
+                          // If ft3 is used in the form, convert it to m3 because m3 is used internally.
+                          volume: isVolumeUnitFt3
+                            ? convertFt3ToM3(roomItem.volume)
+                            : roomItem.volume,
+                        });
                         closeModal();
                         resetForm();
                       }}
                       title={`Edit ${row.name}`}
                       defaultRoomItemNames={defaultRoomItemNames}
                       defaultVolumeLookup={defaultVolumeLookup}
+                      volumeUnit={volumeUnit}
                     />
                   </div>
                 </TableCell>

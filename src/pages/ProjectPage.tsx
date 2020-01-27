@@ -24,7 +24,6 @@ import AddIcon from '@material-ui/icons/Add';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import RoomIcon from '@material-ui/icons/Room';
-import NoteIcon from '@material-ui/icons/Note';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import WarningIcon from '@material-ui/icons/Warning';
 import { Link, navigate } from '@reach/router';
@@ -57,6 +56,7 @@ import {
   incrementRoomItemCountAction,
   decrementRoomItemCountAction,
 } from '../redux/actions';
+import { convertFt3ToM3, VOLUME_UNIT_FT3 } from '../lib';
 
 const ProjectPage: React.FC<{
   id: string;
@@ -161,12 +161,13 @@ const ProjectPage: React.FC<{
 
   const pageTitle = project!.name;
   const currentRoom = rooms.find(r => r.id === currentRoomId);
+  const isVolumeUnitFt3 = volumeUnit === VOLUME_UNIT_FT3;
 
   return (
     <>
       <AppHeader
         renderMenuItems={({ closeMenu }: { closeMenu: () => void }) => (
-          <>
+          <div>
             {rooms.length > 0 && (
               <MenuItem component={Link} to={`/projects/${project!.id}/rooms`}>
                 <ListItemIcon>
@@ -186,7 +187,7 @@ const ProjectPage: React.FC<{
               </ListItemIcon>
               Add room
             </MenuItem>
-          </>
+          </div>
         )}
       />
 
@@ -208,7 +209,7 @@ const ProjectPage: React.FC<{
               <strong>Item Count</strong>: {sumRoomItemsCount(roomItems)}
             </Typography>
             <Typography variant="body2">
-              <strong>Volume</strong>: {sumRoomItemsVolume(roomItems)} ({volumeUnit})
+              <strong>Volume</strong>: {sumRoomItemsVolume(roomItems, volumeUnit)} ({volumeUnit})
             </Typography>
           </Grid>
 
@@ -258,7 +259,7 @@ const ProjectPage: React.FC<{
                             {sumRoomItemsCount(filteredRoomItems)}
                           </TableCell>
                           <TableCell align="center">
-                            {sumRoomItemsVolume(filteredRoomItems)}
+                            {sumRoomItemsVolume(filteredRoomItems, volumeUnit)}
                           </TableCell>
                         </TableRow>
                       );
@@ -308,7 +309,7 @@ const ProjectPage: React.FC<{
                           rows={filteredRoomItems}
                           defaultRoomItemNames={defaultRoomItemNames}
                           defaultVolumeLookup={defaultVolumeLookup}
-                          volumeUnit={volumeUnit as string}
+                          volumeUnit={volumeUnit}
                           onRoomItemCountIncremented={handleRoomItemCountIncremented}
                           onRoomItemCountDecremented={handleRoomItemCountDecremented}
                           onRoomItemUpdated={handleRoomItemUpdated}
@@ -359,7 +360,7 @@ const ProjectPage: React.FC<{
           </Grid>
         </Grid>
 
-        <div className="pm-Modals">
+        <div className="Premoov-modals">
           {project && (
             <ProjectFormDialog
               key={shortid.generate()}
@@ -382,12 +383,17 @@ const ProjectPage: React.FC<{
               onClose={closeAddRoomItemModal}
               onSubmit={(roomItem: RoomItem, { resetForm }: any) => {
                 closeAddRoomItemModal();
-                handleRoomItemAdded(roomItem);
+                handleRoomItemAdded({
+                  ...roomItem,
+                  // If ft3 is used in the form, convert it to m3 because m3 is used internally.
+                  volume: isVolumeUnitFt3 ? convertFt3ToM3(roomItem.volume) : roomItem.volume,
+                });
                 resetForm();
               }}
               title={`Add Item to "${currentRoom!.name}"`}
               defaultRoomItemNames={defaultRoomItemNames}
               defaultVolumeLookup={defaultVolumeLookup}
+              volumeUnit={volumeUnit}
             />
           )}
 

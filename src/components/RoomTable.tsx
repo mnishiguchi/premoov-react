@@ -59,7 +59,7 @@ const RoomTable: React.FC<{
                   </IconButton>
                 </ButtonGroup>
 
-                <div className="pm-Modals">
+                <div className="Premoov-modals">
                   <RoomFormDialog
                     key={shortid.generate()}
                     initialValues={row}

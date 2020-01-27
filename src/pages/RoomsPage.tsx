@@ -74,7 +74,7 @@ const RoomsPage: React.FC<{
           </Grid>
         </Grid>
 
-        <div className="pm-Modals">
+        <div className="Premoov-modals">
           {project && (
             <RoomFormDialog
               key={shortid.generate()}

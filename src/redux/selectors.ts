@@ -1,4 +1,5 @@
-import { AppState, Project, Room, RoomItem } from '../types';
+import { AppState, Project, Room, RoomItem, VolumeUnit } from '../types';
+import { displayVolumeValue } from '../lib';
 
 type SelectProjectByIdType = (
   productId: string
@@ -32,5 +33,10 @@ export const createFilterRoomItemsByProjectId = (roomItems: RoomItem[]) => (proj
 export const sumRoomItemsCount = (roomItems: RoomItem[]) =>
   roomItems.reduce((acc: number, roomItem: RoomItem) => acc + roomItem.count, 0);
 
-export const sumRoomItemsVolume = (roomItems: RoomItem[]) =>
-  roomItems.reduce((acc: number, roomItem: RoomItem) => acc + roomItem.volume * roomItem.count, 0);
+export const sumRoomItemsVolume = (roomItems: RoomItem[], volumeUnit: VolumeUnit) => {
+  const value = roomItems.reduce(
+    (acc: number, roomItem: RoomItem) => acc + roomItem.volume * roomItem.count,
+    0
+  );
+  return displayVolumeValue(value, volumeUnit);
+};

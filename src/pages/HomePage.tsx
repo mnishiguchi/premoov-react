@@ -124,7 +124,8 @@ const HomePage: React.FC = () => {
                   <strong>Item Count</strong>: {sumRoomItemsCount(filteredRoomItems)}
                 </Typography>
                 <Typography variant="body2">
-                  <strong>Volume</strong>: {sumRoomItemsVolume(filteredRoomItems)} ({volumeUnit})
+                  <strong>Volume</strong>: {sumRoomItemsVolume(filteredRoomItems, volumeUnit)} (
+                  {volumeUnit})
                 </Typography>
               </CardContent>
               <CardActions>
@@ -142,7 +143,7 @@ const HomePage: React.FC = () => {
         })}
       </PageContainer>
 
-      <div className="pm-Modals">
+      <div className="Premoov-modals">
         <ProjectFormDialog
           isOpen={isOpenAddProjectModal}
           onClose={closeAddProjectModal}
